@@ -1,15 +1,17 @@
 #include "dialog.h"
 #include "./ui_dialog.h"
-#include <stdio.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
+#include <QDebug>
+#include <iostream>
 
 Dialog::Dialog(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    ls("/Users/stephane/Code/");
+    ls("/Users/stephane/");
 }
 
 Dialog::~Dialog()
@@ -20,17 +22,37 @@ Dialog::~Dialog()
 void Dialog::ls(QString repertoire)
 {
     struct dirent *lecture;
-    DIR *rep;
-    rep = opendir(repertoire.toLatin1()); // "." windows "C://"
+    DIR *dir;
+    struct stat buf;
+    QString currentPath;
 
-    while ((lecture = readdir(rep)) != NULL) {
-        if ((strcmp(lecture->d_name, ".") != 0)) {
-            printf("%s\n", lecture->d_name);
-            ui->listWidgetGauche->addItem(lecture->d_name);
-        }
+    dir = opendir(repertoire.toLocal8Bit()); // "." windows "C://"
+    if (dir == NULL) {
+        qCritical() << "Le répertoire " << repertoire << " n'existe pas";
+        reject();
     }
 
-    closedir(rep);
-
+    while ((lecture = readdir(dir)) != NULL) {
+        if (strcmp(lecture->d_name, ".") != 0) {
+            if (!strcmp(lecture->d_name, "..")) {
+                qInfo() << ".. is path";
+                ui->listWidgetGauche->addItem(lecture->d_name);
+            } else {
+                currentPath = repertoire + lecture->d_name;
+                const char *charCurrentPath = currentPath.toLocal8Bit();
+                if ((stat(charCurrentPath, &buf)) == -1) {
+                    qCritical() << "stat" << currentPath;
+                }
+                if (S_ISDIR(buf.st_mode)) {
+                    QString qstringTemp = lecture->d_name;
+                    qstringTemp += "/";
+                    ui->listWidgetGauche->addItem(qstringTemp);
+                } else {
+                    ui->listWidgetGauche->addItem(lecture->d_name);
+                }
+            }
+        }
+    }
+    closedir(dir);
 }
 
