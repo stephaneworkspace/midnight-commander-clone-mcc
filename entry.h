@@ -18,7 +18,7 @@ public:
     Entry(Type type, QString name, int size_file, QDateTime date_last_modif);
     void setValue(Type type, QString name, int size_file, QDateTime date_last_modif);
     QString getName();
-    int getSize();
+    int getOrder();
     QString getSizeString();
     QString getDateLastModifString();
 signals:

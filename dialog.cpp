@@ -125,5 +125,5 @@ QString Dialog::getRepertoire(QString side) {
 }
 
 bool Dialog::EntryCompare::operator()(Entry *a, Entry *b) const {
-    return(std::make_tuple(a->getSize(), a->getName()) < std::make_tuple(b->getSize(), b->getName())); // TODO case sensitive
+    return(std::make_tuple(a->getOrder(), a->getName().toLower()) < std::make_tuple(b->getOrder(), b->getName().toLower()));
 }

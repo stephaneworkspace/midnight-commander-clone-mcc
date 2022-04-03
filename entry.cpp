@@ -28,8 +28,15 @@ QString Entry::getName()
     return this->name;
 }
 
-int Entry::getSize() {
-    return this->size_file;
+int Entry::getOrder() {
+    switch (this->type) {
+        case Type::File:
+            return 2;
+        case Type::Directory:
+            return 0;
+        default:
+            return 1;
+    }
 }
 
 QString Entry::getSizeString() {
