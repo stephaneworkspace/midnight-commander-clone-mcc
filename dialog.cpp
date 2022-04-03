@@ -37,36 +37,38 @@ void Dialog::ls(QString repertoire)
     ui->tableWidgetGauche->setRowCount(countLs(repertoire));
     while ((lecture = readdir(dir)) != NULL) {
         if (strcmp(lecture->d_name, ".") != 0) {
+            currentPath = repertoire + lecture->d_name;
+            const char *charCurrentPath = currentPath.toLocal8Bit();
+            int s = (stat(charCurrentPath, &buf));
+            // page 864
+            if (s == -1) {
+                qCritical() << "stat" << currentPath;
+            } else if (s) {
+                buf.st_mode  = 0;
+                buf.st_size = 0;
+                buf.st_atime = 0;
+                buf.st_mtime = 0;
+                buf.st_ctime = 0;
+            }
+            int size = buf.st_size;
+            QString s_size = QString::number(size);
             if (!strcmp(lecture->d_name, "..")) {
                 qInfo() << ".. is path";
                 ui->tableWidgetGauche->setItem(row, 0, new QTableWidgetItem(lecture->d_name));
-                ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem("Précédant"));
-                ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem("0"));
+                ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem("REP"));
+                ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem(buf.st_mode));
             } else {
                 qInfo() << lecture->d_name;
-                currentPath = repertoire + lecture->d_name;
-                const char *charCurrentPath = currentPath.toLocal8Bit();
-                int s = (stat(charCurrentPath, &buf));
-                // page 864
-                if (s == -1) {
-                    qCritical() << "stat" << currentPath;
-                } else if (s) {
-                    buf.st_mode  = 0;
-                    buf.st_size = 0;
-                    buf.st_atime = 0;
-                    buf.st_mtime = 0;
-                    buf.st_ctime = 0;
-                }
                 if (S_ISDIR(buf.st_mode)) {
                     QString qstringTemp = lecture->d_name;
                     qstringTemp += "/";
                     ui->tableWidgetGauche->setItem(row, 0, new QTableWidgetItem(qstringTemp));
-                    ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem("Directory"));
-                    ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem("0"));
+                    ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem("REP"));
+                    ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem(buf.st_mode));
                 } else {
                     ui->tableWidgetGauche->setItem(row, 0, new QTableWidgetItem(lecture->d_name));
-                    ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem("File"));
-                    ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem("0"));
+                    ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem(s_size));
+                    ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem(buf.st_mode));
                 }
             }
             row++;
