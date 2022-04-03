@@ -19,7 +19,9 @@ set(PROJECT_SOURCES
         dialog.cpp
         dialog.h
         dialog.ui
-)
+        entry.h
+        entry.cpp
+        )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(midnight-commander-clone-mcc
