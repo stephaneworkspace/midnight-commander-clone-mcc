@@ -32,27 +32,66 @@ void Dialog::ls(QString repertoire)
         reject();
     }
 
+    int row = 0;
+    ui->tableWidgetGauche->setColumnCount(3);
+    ui->tableWidgetGauche->setRowCount(countLs(repertoire));
     while ((lecture = readdir(dir)) != NULL) {
         if (strcmp(lecture->d_name, ".") != 0) {
             if (!strcmp(lecture->d_name, "..")) {
                 qInfo() << ".. is path";
-                ui->listWidgetGauche->addItem(lecture->d_name);
+                ui->tableWidgetGauche->setItem(row, 0, new QTableWidgetItem(lecture->d_name));
+                ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem("Précédant"));
+                ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem("0"));
             } else {
+                qInfo() << lecture->d_name;
                 currentPath = repertoire + lecture->d_name;
                 const char *charCurrentPath = currentPath.toLocal8Bit();
-                if ((stat(charCurrentPath, &buf)) == -1) {
+                int s = (stat(charCurrentPath, &buf));
+                // page 864
+                if (s == -1) {
                     qCritical() << "stat" << currentPath;
+                } else if (s) {
+                    buf.st_mode  = 0;
+                    buf.st_size = 0;
+                    buf.st_atime = 0;
+                    buf.st_mtime = 0;
+                    buf.st_ctime = 0;
                 }
                 if (S_ISDIR(buf.st_mode)) {
                     QString qstringTemp = lecture->d_name;
                     qstringTemp += "/";
-                    ui->listWidgetGauche->addItem(qstringTemp);
+                    ui->tableWidgetGauche->setItem(row, 0, new QTableWidgetItem(qstringTemp));
+                    ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem("Directory"));
+                    ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem("0"));
                 } else {
-                    ui->listWidgetGauche->addItem(lecture->d_name);
+                    ui->tableWidgetGauche->setItem(row, 0, new QTableWidgetItem(lecture->d_name));
+                    ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem("File"));
+                    ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem("0"));
                 }
             }
+            row++;
         }
     }
     closedir(dir);
 }
 
+int Dialog::countLs(QString repertoire) {
+    struct dirent *lecture;
+    DIR *dir;
+    QString currentPath;
+
+    dir = opendir(repertoire.toLocal8Bit()); // "." windows "C://"
+    if (dir == NULL) {
+        qCritical() << "Le répertoire " << repertoire << " n'existe pas";
+        reject();
+    }
+
+    int row = 0;
+    while ((lecture = readdir(dir)) != NULL) {
+        if (strcmp(lecture->d_name, ".") != 0) {
+            row++;
+        }
+    }
+    closedir(dir);
+    return row;
+}

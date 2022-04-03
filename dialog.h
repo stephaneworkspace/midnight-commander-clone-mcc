@@ -18,5 +18,6 @@ public:
 private:
     Ui::Dialog *ui;
     void ls(QString repertoire);
+    int countLs(QString repertoire);
 };
 #endif // DIALOG_H
