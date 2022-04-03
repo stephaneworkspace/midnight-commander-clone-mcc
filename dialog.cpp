@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <QDebug>
 #include <iostream>
+#include <QDateTime>
 
 Dialog::Dialog(QWidget *parent)
     : QDialog(parent)
@@ -34,24 +35,36 @@ void Dialog::ls(QString repertoire)
 
     int row = 0;
     ui->tableWidgetGauche->setColumnCount(3);
+    ui->tableWidgetGauche->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
+    ui->tableWidgetGauche->setVerticalHeaderItem(1, new QTableWidgetItem("Taille"));
+    ui->tableWidgetGauche->setVerticalHeaderItem(2, new QTableWidgetItem("Date de modification"));
     ui->tableWidgetGauche->setRowCount(countLs(repertoire));
     while ((lecture = readdir(dir)) != NULL) {
         if (strcmp(lecture->d_name, ".") != 0) {
             currentPath = repertoire + lecture->d_name;
             const char *charCurrentPath = currentPath.toLocal8Bit();
-            int s = (stat(charCurrentPath, &buf));
-            // page 864
-            if (s == -1) {
+            if ((stat(charCurrentPath, &buf)) == -1) {
                 qCritical() << "stat" << currentPath;
-            } else if (s) {
-                buf.st_mode  = 0;
-                buf.st_size = 0;
-                buf.st_atime = 0;
-                buf.st_mtime = 0;
-                buf.st_ctime = 0;
+                /*
+                struct stat {
+                    dev_t st_dev; // ID of device containing file
+                    ino_t st_ino; // inode number
+                    mode_t st_mode; // protection
+                    nlink_t st_nlink; // number of hard links
+                    uid_t st_uid; // user ID of owner
+                    gid_t st_gid; // group ID of owner
+                    dev_t st_rdev; // device ID (if special file)
+                    off_t st_size; // total size, in bytes
+                    blksize_t st_blksize; // blocksize for file system I/O
+                    blkcnt_t st_blocks; // number of 512B blocks allocated
+                    time_t st_atime; // time of last access
+                    time_t st_mtime; // time of last modification
+                    time_t st_ctime; // time of last status change
+                };*/
             }
             int size = buf.st_size;
             QString s_size = QString::number(size);
+            QDateTime modif = QDateTime::fromSecsSinceEpoch(buf.st_mtime);
             if (!strcmp(lecture->d_name, "..")) {
                 qInfo() << ".. is path";
                 ui->tableWidgetGauche->setItem(row, 0, new QTableWidgetItem(lecture->d_name));
@@ -68,7 +81,7 @@ void Dialog::ls(QString repertoire)
                 } else {
                     ui->tableWidgetGauche->setItem(row, 0, new QTableWidgetItem(lecture->d_name));
                     ui->tableWidgetGauche->setItem(row, 1, new QTableWidgetItem(s_size));
-                    ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem(buf.st_mode));
+                    ui->tableWidgetGauche->setItem(row, 2, new QTableWidgetItem(modif.toString("dd.MM.yyyy hh:mm:ss")));
                 }
             }
             row++;
