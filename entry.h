@@ -18,10 +18,13 @@ public:
     Entry(Type type, QString name, int size_file, QDateTime date_last_modif);
     void setValue(Type type, QString name, int size_file, QDateTime date_last_modif);
     QString getName();
+    int getSize();
+    QString getSizeString();
+    QString getDateLastModifString();
 signals:
 private:
-    Type type;
     QString name;
+    Type type;
     int size_file;
     QDateTime date_last_modif;
 };

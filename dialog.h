@@ -19,9 +19,10 @@ public:
 
 private:
     Ui::Dialog *ui;
-    QVector<Entry*> vec_entry;
-    void ls(QString repertoire);
-    int countLs(QString repertoire);
-    void entry(QString repertoire);
+    QHash<QString, QString> repertoire;
+    void setList(QString side);
+    void setRepertoire(QString repertoire, QString side);
+    QString getRepertoire(QString side);
+    struct EntryCompare { bool operator()(Entry *a, Entry *b) const;};
 };
 #endif // DIALOG_H

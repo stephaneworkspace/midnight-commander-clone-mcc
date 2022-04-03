@@ -1,3 +1,4 @@
+#include <QDateTime>
 #include "entry.h"
 
 Entry::Entry(QObject *parent)
@@ -25,4 +26,22 @@ void Entry::setValue(Type type, QString name, int size_file, QDateTime date_last
 QString Entry::getName()
 {
     return this->name;
+}
+
+int Entry::getSize() {
+    return this->size_file;
+}
+
+QString Entry::getSizeString() {
+    if (this->type == Type::Directory) {
+        return "DIR";
+    } else if (this->type == Type::File) {
+        return QString::number(this->size_file) + " bytes";
+    } else {
+        return "?"; // TODO complete this with a Switch
+    }
+}
+
+QString Entry::getDateLastModifString() {
+    return this->date_last_modif.toString("dd.MM.yyyy hh:mm:ss");
 }
