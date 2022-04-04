@@ -14,17 +14,29 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>TextLabel</string>
+   <item row="1" column="1">
+    <widget class="QTableWidget" name="tableWidgetRight">
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
      </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="pathRight">
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
      <property name="text">
-      <string>TextLabel</string>
+      <string>/</string>
      </property>
     </widget>
    </item>
@@ -60,31 +72,18 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1">
-    <widget class="QTableWidget" name="tableWidgetDroite">
-     <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectRows</enum>
-     </property>
-     <property name="sortingEnabled">
-      <bool>true</bool>
-     </property>
-     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-    </widget>
+   <item row="2" column="0">
+    <widget class="QLineEdit" name="lineEditCmdRight"/>
    </item>
    <item row="0" column="1">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="pathLeft">
      <property name="text">
-      <string>TextLabel</string>
+      <string>/</string>
      </property>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QTableWidget" name="tableWidgetGauche">
+    <widget class="QTableWidget" name="tableWidgetLeft">
      <property name="selectionBehavior">
       <enum>QAbstractItemView::SelectRows</enum>
      </property>
@@ -99,18 +98,16 @@
      </attribute>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
-    </widget>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="lineEditCmdLeft"/>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>tableWidgetGauche</tabstop>
-  <tabstop>tableWidgetDroite</tabstop>
+  <tabstop>tableWidgetLeft</tabstop>
+  <tabstop>lineEditCmdRight</tabstop>
+  <tabstop>tableWidgetRight</tabstop>
+  <tabstop>lineEditCmdLeft</tabstop>
   <tabstop>pushButton_4</tabstop>
   <tabstop>pushButton_3</tabstop>
   <tabstop>pushButton_2</tabstop>

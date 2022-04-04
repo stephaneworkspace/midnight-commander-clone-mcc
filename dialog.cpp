@@ -87,29 +87,29 @@ void Dialog::setList(QString side)
 
     // Ui
     if (side == "L") {
-        ui->tableWidgetGauche->setColumnCount(3);
-        ui->tableWidgetGauche->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
-        ui->tableWidgetGauche->setVerticalHeaderItem(1, new QTableWidgetItem("Taille"));
-        ui->tableWidgetGauche->setVerticalHeaderItem(2, new QTableWidgetItem("Date de modification"));
+        ui->tableWidgetLeft->setColumnCount(3);
+        ui->tableWidgetLeft->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
+        ui->tableWidgetLeft->setVerticalHeaderItem(1, new QTableWidgetItem("Taille"));
+        ui->tableWidgetLeft->setVerticalHeaderItem(2, new QTableWidgetItem("Date de modification"));
         int i = 0;
         foreach(Entry *v, vec_entry) {
-            ui->tableWidgetGauche->insertRow(i);
-            ui->tableWidgetGauche->setItem(i, 0, new QTableWidgetItem(v->getName(),Qt::DisplayRole));
-            ui->tableWidgetGauche->setItem(i, 1, new QTableWidgetItem(v->getSizeString()));
-            ui->tableWidgetGauche->setItem(i, 2, new QTableWidgetItem(v->getDateLastModifString()));
+            ui->tableWidgetLeft->insertRow(i);
+            ui->tableWidgetLeft->setItem(i, 0, new QTableWidgetItem(v->getName(),Qt::DisplayRole));
+            ui->tableWidgetLeft->setItem(i, 1, new QTableWidgetItem(v->getSizeString()));
+            ui->tableWidgetLeft->setItem(i, 2, new QTableWidgetItem(v->getDateLastModifString()));
             i++;
         }
     } else if (side == "R") {
-        ui->tableWidgetDroite->setColumnCount(3);
-        ui->tableWidgetDroite->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
-        ui->tableWidgetDroite->setVerticalHeaderItem(1, new QTableWidgetItem("Taille"));
-        ui->tableWidgetDroite->setVerticalHeaderItem(2, new QTableWidgetItem("Date de modification"));
+        ui->tableWidgetRight->setColumnCount(3);
+        ui->tableWidgetRight->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
+        ui->tableWidgetRight->setVerticalHeaderItem(1, new QTableWidgetItem("Taille"));
+        ui->tableWidgetRight->setVerticalHeaderItem(2, new QTableWidgetItem("Date de modification"));
         int i = 0;
         foreach(Entry *v, vec_entry) {
-            ui->tableWidgetDroite->insertRow(i);
-            ui->tableWidgetDroite->setItem(i, 0, new QTableWidgetItem(v->getName()));
-            ui->tableWidgetDroite->setItem(i, 1, new QTableWidgetItem(v->getSizeString()));
-            ui->tableWidgetDroite->setItem(i, 2, new QTableWidgetItem(v->getDateLastModifString()));
+            ui->tableWidgetRight->insertRow(i);
+            ui->tableWidgetRight->setItem(i, 0, new QTableWidgetItem(v->getName()));
+            ui->tableWidgetRight->setItem(i, 1, new QTableWidgetItem(v->getSizeString()));
+            ui->tableWidgetRight->setItem(i, 2, new QTableWidgetItem(v->getDateLastModifString()));
             i++;
         }
     }
