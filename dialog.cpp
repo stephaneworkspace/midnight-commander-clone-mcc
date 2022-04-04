@@ -13,8 +13,10 @@ Dialog::Dialog(QWidget *parent)
     , ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    this->setRepertoire("/Users/stephane/", "L");
+    this->setDir("/Users/stephane/", "L");
+    this->setDir("/Users/stephane/Code/", "R");
     this->setList("L");
+    this->setList("R");
 }
 
 Dialog::~Dialog()
@@ -26,7 +28,7 @@ Dialog::~Dialog()
 void Dialog::setList(QString side)
 {
     QVector<Entry*> vec_entry;
-    QString repertoire_courant = this->getRepertoire(side);
+    QString repertoire_courant = this->getDir(side);
     struct dirent *lecture;
     DIR *dir;
     struct stat buf;
@@ -87,6 +89,8 @@ void Dialog::setList(QString side)
 
     // Ui
     if (side == "L") {
+        ui->pathLeft->setText(this->getDir(side));
+        ui->pathLeft->adjustSize();
         ui->tableWidgetLeft->setColumnCount(3);
         ui->tableWidgetLeft->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
         ui->tableWidgetLeft->setVerticalHeaderItem(1, new QTableWidgetItem("Taille"));
@@ -100,6 +104,8 @@ void Dialog::setList(QString side)
             i++;
         }
     } else if (side == "R") {
+        ui->pathRight->setText(this->getDir(side));
+        ui->pathRight->adjustSize();
         ui->tableWidgetRight->setColumnCount(3);
         ui->tableWidgetRight->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
         ui->tableWidgetRight->setVerticalHeaderItem(1, new QTableWidgetItem("Taille"));
@@ -115,13 +121,13 @@ void Dialog::setList(QString side)
     }
 }
 
-void Dialog::setRepertoire(QString repertoire, QString side) {
-    this->repertoire.insert(side, repertoire);
+void Dialog::setDir(QString dir, QString side) {
+    this->dir.insert(side, dir);
 }
 
-QString Dialog::getRepertoire(QString side) {
+QString Dialog::getDir(QString side) {
     // TODO security try catch
-    return this->repertoire[side];
+    return this->dir[side];
 }
 
 bool Dialog::EntryCompare::operator()(Entry *a, Entry *b) const {

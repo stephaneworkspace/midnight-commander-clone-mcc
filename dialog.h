@@ -19,10 +19,10 @@ public:
 
 private:
     Ui::Dialog *ui;
-    QHash<QString, QString> repertoire;
+    QHash<QString, QString> dir;
     void setList(QString side);
-    void setRepertoire(QString repertoire, QString side);
-    QString getRepertoire(QString side);
+    void setDir(QString dir, QString side);
+    QString getDir(QString side);
     struct EntryCompare { bool operator()(Entry *a, Entry *b) const;};
 };
 #endif // DIALOG_H
