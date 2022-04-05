@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <iostream>
 #include <QDateTime>
+#include <QMessageBox>
 #include "entry.h"
 
 Dialog::Dialog(QWidget *parent)
@@ -17,6 +18,8 @@ Dialog::Dialog(QWidget *parent)
     this->setDir("/Users/stephane/Code/", "R");
     this->setList("L");
     this->setList("R");
+    this->setDir("/Users/stephane/aaa/", "L");
+    this->setList("L");
 }
 
 Dialog::~Dialog()
@@ -27,23 +30,38 @@ Dialog::~Dialog()
 
 void Dialog::setList(QString side)
 {
+    if (side == "L") {
+        ui->tableWidgetLeft->clear();
+        ui->tableWidgetLeft->setRowCount(0);
+    } else {
+        ui->tableWidgetRight->clear();
+        ui->tableWidgetRight->setRowCount(0);
+    }
     QVector<Entry*> vec_entry;
-    QString repertoire_courant = this->getDir(side);
+    QString path = this->getPath(side);
     struct dirent *lecture;
     DIR *dir;
     struct stat buf;
     QString currentPath;
     int row = 0;
 
-    dir = opendir(repertoire_courant.toLocal8Bit()); // "." windows "C://"
+    dir = opendir(path.toLocal8Bit()); // "." windows "C://"
     if (dir == NULL) {
-        qCritical() << "Le répertoire " << repertoire_courant << " n'existe pas";
-        reject();
+        qCritical() << "Le répertoire " << path << " n'existe pas";
+        //reject(); // TODO throw
+
+        QMessageBox msgBox;
+        msgBox.setText("Path invalid");
+        msgBox.setInformativeText("Your path \"" + path + "\" is invalid");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+        goto end; // TODO cursor on path
     }
 
     while ((lecture = readdir(dir)) != NULL) {
         if (strcmp(lecture->d_name, ".") != 0) {
-            currentPath = repertoire_courant + lecture->d_name;
+            currentPath = path + lecture->d_name;
             const char *charCurrentPath = currentPath.toLocal8Bit();
             if ((stat(charCurrentPath, &buf)) == -1) {
                 qCritical() << "stat" << currentPath;
@@ -89,7 +107,7 @@ void Dialog::setList(QString side)
 
     // Ui
     if (side == "L") {
-        ui->pathLeft->setText(this->getDir(side));
+        ui->pathLeft->setText(this->getPath(side));
         ui->pathLeft->adjustSize();
         ui->tableWidgetLeft->setColumnCount(3);
         ui->tableWidgetLeft->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
@@ -104,7 +122,7 @@ void Dialog::setList(QString side)
             i++;
         }
     } else if (side == "R") {
-        ui->pathRight->setText(this->getDir(side));
+        ui->pathRight->setText(this->getPath(side));
         ui->pathRight->adjustSize();
         ui->tableWidgetRight->setColumnCount(3);
         ui->tableWidgetRight->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
@@ -119,15 +137,16 @@ void Dialog::setList(QString side)
             i++;
         }
     }
+    end:
+    {}
 }
 
 void Dialog::setDir(QString dir, QString side) {
-    this->dir.insert(side, dir);
+    this->hash_path.insert(side, dir);
 }
 
-QString Dialog::getDir(QString side) {
-    // TODO security try catch
-    return this->dir[side];
+QString Dialog::getPath(QString side) {
+    return this->hash_path[side];
 }
 
 bool Dialog::EntryCompare::operator()(Entry *a, Entry *b) const {
