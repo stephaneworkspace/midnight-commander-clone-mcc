@@ -9,7 +9,6 @@ enum Type {
     File, Directory, Other
 };
 
-
 class Entry : public QObject
 {
     Q_OBJECT

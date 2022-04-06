@@ -18,8 +18,6 @@ Dialog::Dialog(QWidget *parent)
     this->setDir("/Users/stephane/Code/", "R");
     this->setList("L");
     this->setList("R");
-    this->setDir("/Users/stephane/aaa/", "L");
-    this->setList("L");
 }
 
 Dialog::~Dialog()
@@ -152,3 +150,34 @@ QString Dialog::getPath(QString side) {
 bool Dialog::EntryCompare::operator()(Entry *a, Entry *b) const {
     return(std::make_tuple(a->getOrder(), a->getName().toLower()) < std::make_tuple(b->getOrder(), b->getName().toLower()));
 }
+
+void Dialog::on_lineEditCmdLeft_returnPressed() {
+   execCmd(ui->lineEditCmdLeft->text(), "L");
+}
+
+void Dialog::on_lineEditCmdRight_returnPressed() {
+    execCmd(ui->lineEditCmdRight->text(), "R");
+}
+
+void Dialog::execCmd(QString cmd, QString side) {
+    QStringList words_list = cmd.split(QLatin1Char(' '));
+    int i = 0;
+    Cmd c = Cmd::None;
+    foreach(const QString &word, words_list) {
+        if (i == 0) {
+            if (word == "cd") {
+                c = Cmd::cd;
+            }
+        } else {
+            if (c == Cmd::cd) {
+                // TODO ..
+                // TODO ajouter / à la fin
+                this->setDir(word, side);
+                this->setList(side);
+            }
+            break;
+        }
+        i++;
+    }
+}
+
