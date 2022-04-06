@@ -171,8 +171,11 @@ void Dialog::execCmd(QString cmd, QString side) {
         } else {
             if (c == Cmd::cd) {
                 // TODO ..
-                // TODO ajouter / à la fin
-                this->setDir(word, side);
+                if (word.endsWith("/")) {
+                    this->setDir(word, side);
+                } else {
+                    this->setDir(word + "/", side);
+                }
                 this->setList(side);
             }
             break;
