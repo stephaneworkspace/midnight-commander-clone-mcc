@@ -39,16 +39,23 @@ int Entry::getOrder() {
     }
 }
 
-QString Entry::getSizeString() {
+QString Entry::getSizeString(int decimals) {
     if (this->type == Type::Directory) {
         return "DIR";
     } else if (this->type == Type::File) {
-        return QString::number(this->size_file) + " bytes";
+        int bytes = this->size_file;
+        if (bytes == 0) return "0 Bytes";
+        const int K = 1024;
+        const QStringList SIZES = { "Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        const int I =  std::floor((std::log(bytes) / std::log(K)));
+        int dm = decimals < 0 ? 0 : decimals;
+        if (I == 0) dm = 0;
+        return QString::number((bytes / std::pow(K, I)),'f', dm) + " " + SIZES[I];
     } else {
-        return "?"; // TODO complete this with a Switch
+        return "?"; // TODO test and complete this with a Switch
     }
 }
 
-QString Entry::getDateLastModifString() {
+QString Entry::getDateLastChangeString() {
     return this->date_last_modif.toString("dd.MM.yyyy hh:mm:ss");
 }

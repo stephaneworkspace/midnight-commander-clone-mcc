@@ -127,8 +127,8 @@ void Dialog::setList(QString side)
         foreach(Entry *v, vec_entry) {
             ui->tableWidgetLeft->insertRow(i);
             ui->tableWidgetLeft->setItem(i, 0, new QTableWidgetItem(v->getName(),Qt::DisplayRole));
-            ui->tableWidgetLeft->setItem(i, 1, new QTableWidgetItem(v->getSizeString()));
-            ui->tableWidgetLeft->setItem(i, 2, new QTableWidgetItem(v->getDateLastModifString()));
+                ui->tableWidgetLeft->setItem(i, 1, new QTableWidgetItem(v->getSizeString(2))); // TODO const
+            ui->tableWidgetLeft->setItem(i, 2, new QTableWidgetItem(v->getDateLastChangeString()));
             i++;
         }
     } else if (side == "R") {
@@ -142,8 +142,8 @@ void Dialog::setList(QString side)
         foreach(Entry *v, vec_entry) {
             ui->tableWidgetRight->insertRow(i);
             ui->tableWidgetRight->setItem(i, 0, new QTableWidgetItem(v->getName()));
-            ui->tableWidgetRight->setItem(i, 1, new QTableWidgetItem(v->getSizeString()));
-            ui->tableWidgetRight->setItem(i, 2, new QTableWidgetItem(v->getDateLastModifString()));
+            ui->tableWidgetRight->setItem(i, 1, new QTableWidgetItem(v->getSizeString(2))); // TODO const
+            ui->tableWidgetRight->setItem(i, 2, new QTableWidgetItem(v->getDateLastChangeString()));
             i++;
         }
     }

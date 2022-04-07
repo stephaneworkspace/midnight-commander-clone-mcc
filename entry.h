@@ -18,8 +18,8 @@ public:
     void setValue(Type type, QString name, int size_file, QDateTime date_last_modif);
     QString getName();
     int getOrder();
-    QString getSizeString();
-    QString getDateLastModifString();
+    QString getSizeString(int decimals);
+    QString getDateLastChangeString();
 signals:
 private:
     QString name;
