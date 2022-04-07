@@ -85,17 +85,29 @@ void Dialog::setList(QString side)
             Entry *entry = new Entry();
             if (!strcmp(lecture->d_name, "..")) {
                 entry->setValue(Type::Directory, lecture->d_name, 0, modif);
-                vec_entry.append(entry);
             } else {
                 vec_entry.append(entry);
                 if (S_ISDIR(buf.st_mode)) {
                     QString qstringTemp = lecture->d_name;
                     qstringTemp += "/";
                     entry->setValue(Type::Directory, qstringTemp, 0, modif);
-                } else {
+                } else if (S_ISBLK(buf.st_mode)) {
+                    entry->setValue(Type::DeviceBloc, lecture->d_name, size, modif); // TODO test if size
+                } else if(S_ISCHR(buf.st_mode)) {
+                    entry->setValue(Type::DeviceCharacter, lecture->d_name, size, modif); // TODO test if size
+                } else if(S_ISFIFO(buf.st_mode)) {
+                    entry->setValue(Type::Fifo, lecture->d_name, size, modif); // TODO test if size
+                } else if(S_ISLNK(buf.st_mode)) {
+                    entry->setValue(Type::SymbolicLink, lecture->d_name, size, modif); // TODO test if size
+                } else if(S_ISSOCK(buf.st_mode)) {
+                    entry->setValue(Type::Socket, lecture->d_name, size, modif); // TODO test if size
+                } else if(S_ISREG(buf.st_mode)) {
                     entry->setValue(Type::File, lecture->d_name, size, modif);
-                } // TODO complete all kind of posibility in unix
+                } else {
+                    entry->setValue(Type::Other, lecture->d_name, size, modif);
+                }
             }
+            vec_entry.append(entry);
             row++;
         }
     }

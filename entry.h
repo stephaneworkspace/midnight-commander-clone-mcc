@@ -6,7 +6,7 @@
 #include <QDateTime>
 
 enum Type {
-    File, Directory, Other
+    File, Directory, DeviceBloc, DeviceCharacter, Fifo, SymbolicLink, Socket, Other
 };
 
 class Entry : public QObject
