@@ -131,6 +131,8 @@ void Dialog::setList(QString side)
             ui->tableWidgetLeft->setItem(i, 2, new QTableWidgetItem(v->getDateLastChangeString()));
             i++;
         }
+        ui->tableWidgetLeft->adjustSize();
+        ui->tableWidgetLeft->resizeColumnsToContents();
     } else if (side == "R") {
         ui->pathRight->setText(this->getPath(side));
         ui->pathRight->adjustSize();
@@ -146,6 +148,8 @@ void Dialog::setList(QString side)
             ui->tableWidgetRight->setItem(i, 2, new QTableWidgetItem(v->getDateLastChangeString()));
             i++;
         }
+        ui->tableWidgetRight->adjustSize();
+        ui->tableWidgetRight->resizeColumnsToContents();
     }
     end:
     {}
