@@ -33,6 +33,8 @@ private slots:
 
     void on_lineEditCmdRight_returnPressed();
 
+    void on_pushButtonF1_clicked();
+
 private:
     Ui::Dialog *ui;
     QHash<QString, QString> hash_path;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1041</width>
-    <height>687</height>
+    <width>1247</width>
+    <height>808</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,6 +39,7 @@
      <property name="font">
       <font>
        <family>Andale Mono</family>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="editTriggers">
@@ -72,6 +73,7 @@
      <property name="font">
       <font>
        <family>Andale Mono</family>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="editTriggers">
@@ -106,12 +108,12 @@
    <item row="2" column="1">
     <widget class="QLineEdit" name="lineEditCmdRight"/>
    </item>
-   <item row="3" column="0">
+   <item row="3" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButton_4">
+      <widget class="QPushButton" name="pushButtonF1">
        <property name="text">
-        <string>PushButton</string>
+        <string>F1 Help</string>
        </property>
       </widget>
      </item>
@@ -136,6 +138,48 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_5">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_6">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_7">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_8">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_9">
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_10">
+       <property name="text">
+        <string>F10 Quit</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -144,11 +188,28 @@
   <tabstop>tableWidgetLeft</tabstop>
   <tabstop>lineEditCmdLeft</tabstop>
   <tabstop>lineEditCmdRight</tabstop>
-  <tabstop>pushButton_4</tabstop>
+  <tabstop>pushButtonF1</tabstop>
   <tabstop>pushButton_3</tabstop>
   <tabstop>pushButton_2</tabstop>
   <tabstop>pushButton</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_10</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1087</x>
+     <y>313</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1106</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

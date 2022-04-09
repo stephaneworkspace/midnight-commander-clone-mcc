@@ -16,6 +16,18 @@ Dialog::Dialog(QWidget *parent)
     ui->setupUi(this);
     try {
         this->setDir("/Users/stephane/", "L");
+    } catch (ErrDirNotFound &e) {
+        // TODO Class/Method
+        QMessageBox msgBox;
+        msgBox.setText(e.what());
+        msgBox.setInformativeText(e.description);
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
+        msgBox.exec();
+        this->setDir("/", "L");
+    }
+    try {
         this->setDir("/Users/stephane/Code/", "R");
     } catch (ErrDirNotFound &e) {
         // TODO Class/Method
@@ -26,7 +38,7 @@ Dialog::Dialog(QWidget *parent)
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
         msgBox.exec();
-        reject(); // TODO find the good word for end with Qt
+        this->setDir("/", "R");
     }
 }
 
@@ -125,9 +137,9 @@ void Dialog::setList(QString side)
         ui->pathLeft->setText(this->getPath(side));
         ui->pathLeft->adjustSize();
         ui->tableWidgetLeft->setColumnCount(3);
-        ui->tableWidgetLeft->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
-        ui->tableWidgetLeft->setVerticalHeaderItem(1, new QTableWidgetItem("Taille"));
-        ui->tableWidgetLeft->setVerticalHeaderItem(2, new QTableWidgetItem("Date de modification"));
+        ui->tableWidgetLeft->setHorizontalHeaderItem(0, new QTableWidgetItem("Nom"));
+        ui->tableWidgetLeft->setHorizontalHeaderItem(1, new QTableWidgetItem("Taille"));
+        ui->tableWidgetLeft->setHorizontalHeaderItem(2, new QTableWidgetItem("Date de modification"));
         int i = 0;
         foreach(Entry *v, vec_entry) {
             ui->tableWidgetLeft->insertRow(i);
@@ -142,9 +154,9 @@ void Dialog::setList(QString side)
         ui->pathRight->setText(this->getPath(side));
         ui->pathRight->adjustSize();
         ui->tableWidgetRight->setColumnCount(3);
-        ui->tableWidgetRight->setVerticalHeaderItem(0, new QTableWidgetItem("Nom"));
-        ui->tableWidgetRight->setVerticalHeaderItem(1, new QTableWidgetItem("Taille"));
-        ui->tableWidgetRight->setVerticalHeaderItem(2, new QTableWidgetItem("Date de modification"));
+        ui->tableWidgetRight->setHorizontalHeaderItem(0, new QTableWidgetItem("Nom"));
+        ui->tableWidgetRight->setHorizontalHeaderItem(1, new QTableWidgetItem("Taille"));
+        ui->tableWidgetRight->setHorizontalHeaderItem(2, new QTableWidgetItem("Date de modification"));
         int i = 0;
         foreach(Entry *v, vec_entry) {
             ui->tableWidgetRight->insertRow(i);
@@ -173,10 +185,12 @@ bool Dialog::EntryCompare::operator()(Entry *a, Entry *b) const {
 
 void Dialog::on_lineEditCmdLeft_returnPressed() {
    execCmd(ui->lineEditCmdLeft->text(), "L");
+   ui->lineEditCmdLeft->clear();
 }
 
 void Dialog::on_lineEditCmdRight_returnPressed() {
     execCmd(ui->lineEditCmdRight->text(), "R");
+    ui->lineEditCmdRight->clear();
 }
 
 void Dialog::execCmd(QString cmd, QString side) {
@@ -206,7 +220,7 @@ void Dialog::execCmd(QString cmd, QString side) {
                     msgBox.setDefaultButton(QMessageBox::Ok);
                     msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
                     msgBox.exec();
-                    // TODO manipulation QString pour venir / en arrière et si == " " -> /
+                    this->setDir("/", side); // TODO manipulation QString pour venir / en arrière et si == " " -> /
                 }
             }
             // TODO curseur sur QWidgetTable side
@@ -214,5 +228,11 @@ void Dialog::execCmd(QString cmd, QString side) {
         }
         i++;
     }
+}
+
+
+void Dialog::on_pushButtonF1_clicked()
+{
+   //this->reject(); TODO conflit avec execCmd ???
 }
 
