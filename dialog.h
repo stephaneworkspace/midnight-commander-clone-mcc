@@ -9,6 +9,13 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class Dialog; }
 QT_END_NAMESPACE
 
+struct ErrDirNotFound: public std::exception {
+    QString description;
+    const char *what() const throw() {
+        return "Directory not found";
+    }
+};
+
 enum Cmd {
     cd, None
 };

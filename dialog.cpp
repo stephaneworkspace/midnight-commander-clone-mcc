@@ -14,10 +14,20 @@ Dialog::Dialog(QWidget *parent)
     , ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    this->setDir("/Users/stephane/", "L");
-    this->setDir("/Users/stephane/Code/", "R");
-    this->setList("L");
-    this->setList("R");
+    try {
+        this->setDir("/Users/stephane/", "L");
+        this->setDir("/Users/stephane/Code/", "R");
+    } catch (ErrDirNotFound &e) {
+        // TODO Class/Method
+        QMessageBox msgBox;
+        msgBox.setText(e.what());
+        msgBox.setInformativeText(e.description);
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
+        msgBox.exec();
+        reject(); // TODO find the good word for end with Qt
+    }
 }
 
 Dialog::~Dialog()
@@ -25,7 +35,9 @@ Dialog::~Dialog()
     delete ui;
 }
 
-
+/*
+ * Err: ErrDirNotFound
+ */
 void Dialog::setList(QString side)
 {
     if (side == "L") {
@@ -45,16 +57,10 @@ void Dialog::setList(QString side)
 
     dir = opendir(path.toLocal8Bit()); // "." windows "C://"
     if (dir == NULL) {
-        qCritical() << "Le répertoire " << path << " n'existe pas";
-        //reject(); // TODO throw
-
-        QMessageBox msgBox;
-        msgBox.setText("Path invalid");
-        msgBox.setInformativeText("Your path \"" + path + "\" is invalid");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.exec();
-        goto end; // TODO cursor on path
+        ErrDirNotFound e;
+        QString description = "Le répertoire " + path + " n'existe pas";
+        e.description = description;
+        throw e;
     }
 
     while ((lecture = readdir(dir)) != NULL) {
@@ -86,7 +92,6 @@ void Dialog::setList(QString side)
             if (!strcmp(lecture->d_name, "..")) {
                 entry->setValue(Type::Directory, lecture->d_name, 0, modif);
             } else {
-                vec_entry.append(entry);
                 if (S_ISDIR(buf.st_mode)) {
                     QString qstringTemp = lecture->d_name;
                     qstringTemp += "/";
@@ -113,7 +118,6 @@ void Dialog::setList(QString side)
     }
     delete lecture;
     closedir(dir);
-
     std::sort(vec_entry.begin(), vec_entry.end(), Dialog::EntryCompare());
 
     // Ui
@@ -152,12 +156,11 @@ void Dialog::setList(QString side)
         ui->tableWidgetRight->adjustSize();
         ui->tableWidgetRight->resizeColumnsToContents();
     }
-    end:
-    {}
 }
 
 void Dialog::setDir(QString dir, QString side) {
     this->hash_path.insert(side, dir);
+    this->setList(side);
 }
 
 QString Dialog::getPath(QString side) {
@@ -188,13 +191,25 @@ void Dialog::execCmd(QString cmd, QString side) {
         } else {
             if (c == Cmd::cd) {
                 // TODO ..
-                if (word.endsWith("/")) {
-                    this->setDir(word, side);
-                } else {
-                    this->setDir(word + "/", side);
+                try {
+                    if (word.endsWith("/")) {
+                        this->setDir(word, side);
+                    } else {
+                        this->setDir(word + "/", side);
+                    }
+                } catch (ErrDirNotFound &e) {
+                    // TODO Class/Method
+                    QMessageBox msgBox;
+                    msgBox.setText(e.what());
+                    msgBox.setInformativeText(e.description);
+                    msgBox.setStandardButtons(QMessageBox::Ok);
+                    msgBox.setDefaultButton(QMessageBox::Ok);
+                    msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
+                    msgBox.exec();
+                    // TODO manipulation QString pour venir / en arrière et si == " " -> /
                 }
-                this->setList(side);
             }
+            // TODO curseur sur QWidgetTable side
             break;
         }
         i++;
