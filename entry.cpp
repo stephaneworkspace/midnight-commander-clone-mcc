@@ -12,7 +12,7 @@ Entry::Entry(Type type, QString name, int size_file, QDateTime date_last_modif)
     this->type = type;
     this->name = name;
     this->size_file = size_file;
-    this->date_last_modif = date_last_modif;
+    this->date_last_change = date_last_modif;
 }
 
 void Entry::setValue(Type type, QString name, int size_file, QDateTime date_last_modif)
@@ -20,7 +20,7 @@ void Entry::setValue(Type type, QString name, int size_file, QDateTime date_last
     this->type = type;
     this->name = name;
     this->size_file = size_file;
-    this->date_last_modif = date_last_modif;
+    this->date_last_change = date_last_modif;
 }
 
 QString Entry::getName()
@@ -57,5 +57,5 @@ QString Entry::getSizeString(int decimals) {
 }
 
 QString Entry::getDateLastChangeString() {
-    return this->date_last_modif.toString("dd.MM.yyyy hh:mm:ss");
+    return this->date_last_change.toString("dd.MM.yyyy hh:mm:ss");
 }

@@ -111,6 +111,7 @@ void Dialog::setList(QString side)
             row++;
         }
     }
+    delete lecture;
     closedir(dir);
 
     std::sort(vec_entry.begin(), vec_entry.end(), Dialog::EntryCompare());

@@ -25,7 +25,7 @@ private:
     QString name;
     Type type;
     int size_file;
-    QDateTime date_last_modif;
+    QDateTime date_last_change;
 };
 
 #endif // ENTRY_H
