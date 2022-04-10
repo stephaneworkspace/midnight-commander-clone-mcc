@@ -111,72 +111,51 @@
    <item row="3" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="pushButtonF1">
+      <widget class="QPushButton" name="pushButton_F4">
        <property name="text">
-        <string>F1 Help</string>
+        <string>F4 Editer</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="pushButton_F5">
        <property name="text">
-        <string>PushButton</string>
+        <string>F5 Copier</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="pushButton_F6">
        <property name="text">
-        <string>PushButton</string>
+        <string>F6 Renomer / Déplacer</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="pushButton_F7">
        <property name="text">
-        <string>PushButton</string>
+        <string>F7 Créer répertoire</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="pushButton_F8">
        <property name="text">
-        <string>PushButton</string>
+        <string>F8 Effacer</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_6">
+      <widget class="QPushButton" name="pushButton_F9">
        <property name="text">
-        <string>PushButton</string>
+        <string>F9 Menu déroulant</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_7">
+      <widget class="QPushButton" name="pushButton_F10">
        <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_8">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_9">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_10">
-       <property name="text">
-        <string>F10 Quit</string>
+        <string>F10 Quiter</string>
        </property>
       </widget>
      </item>
@@ -188,15 +167,12 @@
   <tabstop>tableWidgetLeft</tabstop>
   <tabstop>lineEditCmdLeft</tabstop>
   <tabstop>lineEditCmdRight</tabstop>
-  <tabstop>pushButtonF1</tabstop>
-  <tabstop>pushButton_3</tabstop>
-  <tabstop>pushButton_2</tabstop>
-  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_F4</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton_10</sender>
+   <sender>pushButton_F10</sender>
    <signal>clicked()</signal>
    <receiver>Dialog</receiver>
    <slot>reject()</slot>
