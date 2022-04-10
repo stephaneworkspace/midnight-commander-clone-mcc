@@ -16,6 +16,8 @@ Dialog::Dialog(QWidget *parent)
     , ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+
+    // Menu
     QMenu *i1 = new QMenu("Fichier");
     i1->addAction("cHmod");
     i1->addAction("Lien");
@@ -32,6 +34,16 @@ Dialog::Dialog(QWidget *parent)
     t->addMenu(i2);
     t->addMenu(i3);
     t->show();
+
+    // Left - Right QTableWidget
+    QPalette paletteL = ui->tableWidgetLeft->palette();
+    paletteL.setBrush(QPalette::Highlight,QBrush(Qt::white));
+    paletteL.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
+    ui->tableWidgetLeft->setPalette(paletteL);
+    QPalette paletteR = ui->tableWidgetRight->palette();
+    paletteR.setBrush(QPalette::Highlight,QBrush(Qt::white));
+    paletteR.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
+    ui->tableWidgetRight->setPalette(paletteR);
 
     try {
         this->setDir("/Users/stephane/", "L");
@@ -59,6 +71,8 @@ Dialog::Dialog(QWidget *parent)
         msgBox.exec();
         this->setDir("/", "R");
     }
+    ui->tableWidgetRight->setCurrentIndex(ui->tableWidgetRight->model()->index(0, 0));
+    ui->tableWidgetLeft->setCurrentIndex(ui->tableWidgetLeft->model()->index(0, 0));
 }
 
 Dialog::~Dialog()
