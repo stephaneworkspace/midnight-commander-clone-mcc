@@ -165,9 +165,16 @@
  </widget>
  <tabstops>
   <tabstop>tableWidgetLeft</tabstop>
+  <tabstop>tableWidgetRight</tabstop>
   <tabstop>lineEditCmdLeft</tabstop>
   <tabstop>lineEditCmdRight</tabstop>
   <tabstop>pushButton_F4</tabstop>
+  <tabstop>pushButton_F5</tabstop>
+  <tabstop>pushButton_F6</tabstop>
+  <tabstop>pushButton_F7</tabstop>
+  <tabstop>pushButton_F8</tabstop>
+  <tabstop>pushButton_F9</tabstop>
+  <tabstop>pushButton_F10</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -178,8 +185,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1087</x>
-     <y>313</y>
+     <x>1233</x>
+     <y>795</y>
     </hint>
     <hint type="destinationlabel">
      <x>1106</x>

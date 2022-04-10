@@ -30,10 +30,7 @@ public:
 
 private slots:
     void on_lineEditCmdLeft_returnPressed();
-
     void on_lineEditCmdRight_returnPressed();
-
-    void on_pushButtonF1_clicked();
 
 private:
     Ui::Dialog *ui;

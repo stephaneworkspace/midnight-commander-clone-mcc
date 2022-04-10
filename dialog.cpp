@@ -275,10 +275,3 @@ void Dialog::execCmd(QString cmd, QString side) {
         i++;
     }
 }
-
-
-void Dialog::on_pushButtonF1_clicked()
-{
-   //this->reject(); TODO conflit avec execCmd ???
-}
-
