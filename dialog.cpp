@@ -7,6 +7,8 @@
 #include <iostream>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QMenu>
+#include <QMenuBar>
 #include "entry.h"
 
 Dialog::Dialog(QWidget *parent)
@@ -14,6 +16,23 @@ Dialog::Dialog(QWidget *parent)
     , ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+    QMenu *i1 = new QMenu("Fichier");
+    i1->addAction("cHmod");
+    i1->addAction("Lien");
+    i1->addAction("Lien symbolique");
+    i1->addAction("Editer lien symbolique");
+    i1->addAction("ch0wn");
+    i1->addAction("ch0wn Avancé");
+    QMenu *i2 = new QMenu("Commande");
+    i2->addAction("TODO");
+    QMenu *i3 = new QMenu("Options");
+    i3->addAction("TODO");
+    QMenuBar *t = new QMenuBar;
+    t->addMenu(i1);
+    t->addMenu(i2);
+    t->addMenu(i3);
+    t->show();
+
     try {
         this->setDir("/Users/stephane/", "L");
     } catch (ErrDirNotFound &e) {
