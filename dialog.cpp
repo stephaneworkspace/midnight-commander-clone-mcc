@@ -194,6 +194,8 @@ void Dialog::on_lineEditCmdRight_returnPressed() {
 }
 
 void Dialog::execCmd(QString cmd, QString side) {
+    bool swFirstTime = true;
+    begin:
     QStringList words_list = cmd.split(QLatin1Char(' '));
     int i = 0;
     Cmd c = Cmd::None;
@@ -204,7 +206,6 @@ void Dialog::execCmd(QString cmd, QString side) {
             }
         } else {
             if (c == Cmd::cd) {
-                // TODO ..
                 try {
                     if (word.endsWith("/")) {
                         this->setDir(word, side);
@@ -213,17 +214,41 @@ void Dialog::execCmd(QString cmd, QString side) {
                     }
                 } catch (ErrDirNotFound &e) {
                     // TODO Class/Method
-                    QMessageBox msgBox;
-                    msgBox.setText(e.what());
-                    msgBox.setInformativeText(e.description);
-                    msgBox.setStandardButtons(QMessageBox::Ok);
-                    msgBox.setDefaultButton(QMessageBox::Ok);
-                    msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
-                    msgBox.exec();
-                    this->setDir("/", side); // TODO manipulation QString pour venir / en arrière et si == " " -> /
+                    if (swFirstTime) {
+                        QMessageBox msgBox;
+                        msgBox.setText(e.what());
+                        msgBox.setInformativeText(e.description);
+                        msgBox.setStandardButtons(QMessageBox::Ok);
+                        msgBox.setDefaultButton(QMessageBox::Ok);
+                        msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
+                        msgBox.exec();
+                    }
+                    QString dir = this->getPath(side);
+                    QString lastIndex = "/";
+                    int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
+                    if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
+                        this->setDir("/", side);
+                    } else {
+                        QStringList list = dir.split('/');
+                        dir = "";
+                        for (int j = 0; j < (list.size() - 2); ++j) {
+                            if (j == 0) {
+                                dir = list[j];
+                            } else {
+                                dir += "/" + list[j];
+                            }
+                        }
+                        cmd = "cd " + dir;
+                        swFirstTime = false;
+                        goto begin;
+                    }
                 }
             }
-            // TODO curseur sur QWidgetTable side
+            if (side == "L") {
+                ui->tableWidgetLeft->setFocus(); // TODO first item
+            } else {
+                ui->tableWidgetRight->setFocus();
+            }
             break;
         }
         i++;
