@@ -245,9 +245,11 @@ void Dialog::execCmd(QString cmd, QString side) {
                 }
             }
             if (side == "L") {
-                ui->tableWidgetLeft->setFocus(); // TODO first item
+                ui->tableWidgetLeft->setFocus();
+                ui->tableWidgetLeft->selectRow(0);
             } else {
                 ui->tableWidgetRight->setFocus();
+                ui->tableWidgetRight->selectRow(0);
             }
             break;
         }
