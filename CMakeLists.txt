@@ -21,7 +21,7 @@ set(PROJECT_SOURCES
         dialog.ui
         entry.h
         entry.cpp
-        )
+        keyEnterReceiver.cpp keyEnterReceiver.h)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(midnight-commander-clone-mcc

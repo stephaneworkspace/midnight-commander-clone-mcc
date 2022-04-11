@@ -10,6 +10,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include "entry.h"
+#include "keyEnterReceiver.h"
 
 Dialog::Dialog(QWidget *parent)
     : QDialog(parent)
@@ -36,6 +37,9 @@ Dialog::Dialog(QWidget *parent)
     t->show();
 
     // Left - Right QTableWidget
+    keyEnterReceiver* key = new keyEnterReceiver();
+    this->installEventFilter(key);
+
     QPalette paletteL = ui->tableWidgetLeft->palette();
     paletteL.setBrush(QPalette::Highlight,QBrush(Qt::white));
     paletteL.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
@@ -288,4 +292,22 @@ void Dialog::execCmd(QString cmd, QString side) {
         }
         i++;
     }
+}
+
+// TODO ne fonctionne pas correctement
+void Dialog::on_tableWidgetLeft_cellEntered(int row, int column)
+{
+    QMessageBox msgBox;
+    msgBox.setText("Cell entered (click)");
+    msgBox.setInformativeText("Cell entered");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
+    msgBox.exec();
+}
+
+
+void Dialog::on_tableWidgetRight_cellEntered(int row, int column)
+{
+
 }

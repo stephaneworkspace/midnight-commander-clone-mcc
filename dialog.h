@@ -27,11 +27,13 @@ class Dialog : public QDialog
 public:
     Dialog(QWidget *parent = nullptr);
     ~Dialog();
-
 private slots:
     void on_lineEditCmdLeft_returnPressed();
     void on_lineEditCmdRight_returnPressed();
 
+    void on_tableWidgetLeft_cellEntered(int row, int column);
+
+    void on_tableWidgetRight_cellEntered(int row, int column);
 private:
     Ui::Dialog *ui;
     QHash<QString, QString> hash_path;
