@@ -311,21 +311,31 @@ void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
 }
 
 bool Dialog::eventFilter(QObject *obj, QEvent *event) {
-    QWidget* fw = this->focusWidget();
-    if (fw != Q_NULLPTR) {
-        qDebug() << fw->objectName();
-    }
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
         if ( (key->key() == Qt::Key_Enter) || (key->key() == Qt::Key_Return) ) {
-            //Enter or return was pressed
-            QMessageBox msgBox;
-            msgBox.setText("Key enter");
-            msgBox.setInformativeText("Cell entered");
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setDefaultButton(QMessageBox::Ok);
-            msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
-            msgBox.exec();
+            QWidget* fw = this->focusWidget();
+            if (fw != Q_NULLPTR) {
+                qDebug() << fw->objectName();
+                QTableWidget* fwtable = dynamic_cast<QTableWidget *>(this->focusWidget());
+                qDebug() << fwtable->currentRow();
+                //qDebug() << fwtable->currentItem();
+                /*if (fw->objectName() == "tableWidgetLeft") {
+                    QString cmd;
+                    this->execCmd(cmd,"L");
+                } else if (fw->objectName() == "tableWidgetRight") {
+                    QString cmd;
+                    this->execCmd(cmd,"R");
+                }*/
+                //Enter or return was pressed
+                QMessageBox msgBox;
+                msgBox.setText("Key enter");
+                msgBox.setInformativeText("Cell entered");
+                msgBox.setStandardButtons(QMessageBox::Ok);
+                msgBox.setDefaultButton(QMessageBox::Ok);
+                msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
+                msgBox.exec();
+            }
         } else {
             return QObject::eventFilter(obj, event);
         }
