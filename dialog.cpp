@@ -311,9 +311,13 @@ void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
 }
 
 bool Dialog::eventFilter(QObject *obj, QEvent *event) {
-    if (event->type()==QEvent::KeyPress) {
+    QWidget* fw = this->focusWidget();
+    if (fw != Q_NULLPTR) {
+        qDebug() << fw->objectName();
+    }
+    if (event->type() == QEvent::KeyPress) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
-        if ( (key->key()==Qt::Key_Enter) || (key->key()==Qt::Key_Return) ) {
+        if ( (key->key() == Qt::Key_Enter) || (key->key() == Qt::Key_Return) ) {
             //Enter or return was pressed
             QMessageBox msgBox;
             msgBox.setText("Key enter");
