@@ -9,8 +9,8 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QMenuBar>
+#include <QKeyEvent>
 #include "entry.h"
-#include "keyEnterReceiver.h"
 
 Dialog::Dialog(QWidget *parent)
     : QDialog(parent)
@@ -36,10 +36,10 @@ Dialog::Dialog(QWidget *parent)
     t->addMenu(i3);
     t->show();
 
-    // Left - Right QTableWidget
-    keyEnterReceiver* key = new keyEnterReceiver();
-    this->installEventFilter(key);
+    // Event key press
+    this->installEventFilter(this);
 
+    // Left - Right QTableWidget
     QPalette paletteL = ui->tableWidgetLeft->palette();
     paletteL.setBrush(QPalette::Highlight,QBrush(Qt::white));
     paletteL.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
@@ -308,5 +308,27 @@ void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
     msgBox.setDefaultButton(QMessageBox::Ok);
     msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
     msgBox.exec();
+}
+
+bool Dialog::eventFilter(QObject *obj, QEvent *event) {
+    if (event->type()==QEvent::KeyPress) {
+        QKeyEvent* key = static_cast<QKeyEvent*>(event);
+        if ( (key->key()==Qt::Key_Enter) || (key->key()==Qt::Key_Return) ) {
+            //Enter or return was pressed
+            QMessageBox msgBox;
+            msgBox.setText("Key enter");
+            msgBox.setInformativeText("Cell entered");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
+            msgBox.exec();
+        } else {
+            return QObject::eventFilter(obj, event);
+        }
+        return true;
+    } else {
+        return QObject::eventFilter(obj, event);
+    }
+    return false;
 }
 

@@ -27,6 +27,9 @@ class Dialog : public QDialog
 public:
     Dialog(QWidget *parent = nullptr);
     ~Dialog();
+
+protected:
+    bool eventFilter(QObject* obj, QEvent* event);
 private slots:
     void on_lineEditCmdLeft_returnPressed();
     void on_lineEditCmdRight_returnPressed();
