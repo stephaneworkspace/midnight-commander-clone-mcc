@@ -294,11 +294,15 @@ void Dialog::execCmd(QString cmd, QString side) {
     }
 }
 
-// TODO ne fonctionne pas correctement
-void Dialog::on_tableWidgetLeft_cellEntered(int row, int column)
+void Dialog::on_tableWidgetRight_cellEntered(int row, int column)
+{
+
+}
+
+void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
 {
     QMessageBox msgBox;
-    msgBox.setText("Cell entered (click)");
+    msgBox.setText("Cell entered (double click)");
     msgBox.setInformativeText("Cell entered");
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
@@ -306,8 +310,3 @@ void Dialog::on_tableWidgetLeft_cellEntered(int row, int column)
     msgBox.exec();
 }
 
-
-void Dialog::on_tableWidgetRight_cellEntered(int row, int column)
-{
-
-}
