@@ -31,8 +31,10 @@ public:
 protected:
     bool eventFilter(QObject* obj, QEvent* event);
 private slots:
-    void on_tableWidgetRight_cellEntered(int row, int column);
+
     void on_tableWidgetLeft_cellDoubleClicked(int row, int column);
+
+    void on_tableWidgetRight_cellDoubleClicked(int row, int column);
 
 private:
     Ui::Dialog *ui;

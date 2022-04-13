@@ -217,7 +217,6 @@ void Dialog::setDir(QString dir, QString side) {
     } else if (side == "R") {
         ui->pathRight->setText(dir);
     }
-    qDebug() << dir;
     this->setList(side);
 }
 
@@ -285,26 +284,10 @@ void Dialog::execCmd(QString cmd, QString side) {
     }
 }
 
-void Dialog::on_tableWidgetRight_cellEntered(int row, int column)
-{
-
-}
-
-void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
-{
-    QMessageBox msgBox;
-    msgBox.setText("Cell entered (double click)");
-    msgBox.setInformativeText("Cell entered");
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
-    msgBox.exec();
-}
-
 bool Dialog::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
-        if ( (key->key() == Qt::Key_Enter) || (key->key() == Qt::Key_Return) ) {
+        if ( (key->key() == Qt::Key_Enter) || (key->key() == Qt::Key_Return)) {
             QWidget* fw = this->focusWidget();
             if (fw != Q_NULLPTR) {
                 if (fw->objectName() == "lineEditCmdLeft") {
@@ -366,4 +349,51 @@ QString Dialog::minusOneLevel(QString dir) {
     }
     return dir;
 }
+void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
+{
+    QString side = "L";
+    QString dir = ui->pathLeft->text();
+    QVector<Entry*> vec_entry = this->hash_side_entry[side];
+    QString dir_enter = vec_entry.takeAt(ui->tableWidgetLeft->currentRow())->getName();
+    if (dir_enter == "..") {
+        QString lastIndex = "/";
+        int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
+        if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
+            this->setDir("/", side);
+        } else {
+            dir = this->minusOneLevel(dir);
+        }
+    } else {
+        dir += dir_enter;
+    }
+    if (dir == "") {
+        dir = "/";
+    }
+    this->setDir(dir, side);
+    this->execCmd("cd " + dir,side);
+}
 
+
+void Dialog::on_tableWidgetRight_cellDoubleClicked(int row, int column)
+{
+    QString side = "R";
+    QString dir = ui->pathRight->text();
+    QVector<Entry*> vec_entry = this->hash_side_entry[side];
+    QString dir_enter = vec_entry.takeAt(ui->tableWidgetRight->currentRow())->getName();
+    if (dir_enter == "..") {
+        QString lastIndex = "/";
+        int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
+        if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
+            this->setDir("/", side);
+        } else {
+            dir = this->minusOneLevel(dir);
+        }
+    } else {
+        dir += dir_enter;
+    }
+    if (dir == "") {
+        dir = "/";
+    }
+    this->setDir(dir, side);
+    this->execCmd("cd " + dir,side);
+}
