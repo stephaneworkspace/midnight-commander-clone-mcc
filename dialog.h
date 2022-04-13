@@ -31,8 +31,6 @@ public:
 protected:
     bool eventFilter(QObject* obj, QEvent* event);
 private slots:
-    void on_lineEditCmdLeft_returnPressed();
-    void on_lineEditCmdRight_returnPressed();
     void on_tableWidgetRight_cellEntered(int row, int column);
     void on_tableWidgetLeft_cellDoubleClicked(int row, int column);
 
@@ -44,6 +42,7 @@ private:
     void setDir(QString dir, QString side);
     QString getPath (QString side);
     void execCmd(QString cmd, QString side);
+    QString minusOneLevel(QString dir);
     struct EntryCompare { bool operator()(Entry *a, Entry *b) const;};
 };
 #endif // DIALOG_H

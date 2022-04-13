@@ -139,7 +139,9 @@ void Dialog::setList(QString side)
             QDateTime modif = QDateTime::fromSecsSinceEpoch(buf.st_mtime);
             Entry *entry = new Entry();
             if (!strcmp(lecture->d_name, "..")) {
-                entry->setValue(Type::Directory, lecture->d_name, 0, modif);
+                if (this->getPath(side) != "/") {
+                    entry->setValue(Type::Directory, lecture->d_name, 0, modif);
+                }
             } else {
                 if (S_ISDIR(buf.st_mode)) {
                     QString qstringTemp = lecture->d_name;
@@ -215,6 +217,7 @@ void Dialog::setDir(QString dir, QString side) {
     } else if (side == "R") {
         ui->pathRight->setText(dir);
     }
+    qDebug() << dir;
     this->setList(side);
 }
 
@@ -224,16 +227,6 @@ QString Dialog::getPath(QString side) {
 
 bool Dialog::EntryCompare::operator()(Entry *a, Entry *b) const {
     return(std::make_tuple(a->getOrder(), a->getName().toLower()) < std::make_tuple(b->getOrder(), b->getName().toLower()));
-}
-
-void Dialog::on_lineEditCmdLeft_returnPressed() {
-   execCmd(ui->lineEditCmdLeft->text(), "L");
-   ui->lineEditCmdLeft->clear();
-}
-
-void Dialog::on_lineEditCmdRight_returnPressed() {
-    execCmd(ui->lineEditCmdRight->text(), "R");
-    ui->lineEditCmdRight->clear();
 }
 
 void Dialog::execCmd(QString cmd, QString side) {
@@ -272,18 +265,8 @@ void Dialog::execCmd(QString cmd, QString side) {
                     if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
                         this->setDir("/", side);
                     } else {
-                        QStringList list = dir.split('/');
-                        dir = "";
-                        for (int j = 0; j < (list.size() - 2); ++j) {
-                            if (j == 0) {
-                                dir = list[j];
-                            } else {
-                                dir += "/" + list[j];
-                            }
-                        }
+                        dir = this->minusOneLevel(dir);
                         cmd = "cd " + dir;
-                        // debug here
-                        this->hash_path.insert(side, dir);
                         swFirstTime = false;
                         goto begin;
                     }
@@ -324,7 +307,13 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
         if ( (key->key() == Qt::Key_Enter) || (key->key() == Qt::Key_Return) ) {
             QWidget* fw = this->focusWidget();
             if (fw != Q_NULLPTR) {
-                if (fw->objectName() == "tableWidgetLeft" || fw->objectName() == "tableWidgetRight") {
+                if (fw->objectName() == "lineEditCmdLeft") {
+                    execCmd(ui->lineEditCmdLeft->text(), "L");
+                    ui->lineEditCmdLeft->clear();
+                } else if (fw->objectName() == "lineEditCmdRight") {
+                    execCmd(ui->lineEditCmdRight->text(), "L");
+                    ui->lineEditCmdRight->clear();
+                } else if (fw->objectName() == "tableWidgetLeft" || fw->objectName() == "tableWidgetRight") {
                     QTableWidget *fwtable = dynamic_cast<QTableWidget *>(this->focusWidget());
                     QString side;
                     QString dir;
@@ -343,15 +332,7 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
                         if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
                             this->setDir("/", side);
                         } else {
-                            QStringList list = dir.split('/');
-                            dir = "";
-                            for (int j = 0; j < (list.size() - 2); ++j) {
-                                if (j == 0) {
-                                    dir = list[j];
-                                } else {
-                                    dir += "/" + list[j];
-                                }
-                            }
+                            dir = this->minusOneLevel(dir);
                         }
                     } else {
                         dir += dir_enter;
@@ -371,5 +352,18 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
         return QObject::eventFilter(obj, event);
     }
     return false;
+}
+
+QString Dialog::minusOneLevel(QString dir) {
+    QStringList list = dir.split('/');
+    dir = "";
+    for (int j = 0; j < (list.size() - 2); ++j) {
+        if (j == 0) {
+            dir = list[j];
+        } else {
+            dir += "/" + list[j];
+        }
+    }
+    return dir;
 }
 
