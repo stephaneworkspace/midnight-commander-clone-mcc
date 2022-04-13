@@ -360,6 +360,9 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
                     } else {
                         dir += dir_enter;
                     }
+                    if (dir == "") {
+                        dir = "/";
+                    }
                     this->setDir(dir, side);
                     this->execCmd("cd " + dir,side);
                 }
