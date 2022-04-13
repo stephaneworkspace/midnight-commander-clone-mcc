@@ -338,22 +338,18 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
                     QVector<Entry*> vec_entry = this->hash_side_entry[side];
                     QString dir_enter = vec_entry.takeAt(fwtable->currentRow())->getName();
                     if (dir_enter == "..") {
-                        if (dir == "/") {
-                            // TODO fix this bug
+                        QString lastIndex = "/";
+                        int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
+                        if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
+                            this->setDir("/", side);
                         } else {
-                            QString lastIndex = "/";
-                            int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
-                            if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
-                                this->setDir("/", side);
-                            } else {
-                                QStringList list = dir.split('/');
-                                dir = "";
-                                for (int j = 0; j < (list.size() - 2); ++j) {
-                                    if (j == 0) {
-                                        dir = list[j];
-                                    } else {
-                                        dir += "/" + list[j];
-                                    }
+                            QStringList list = dir.split('/');
+                            dir = "";
+                            for (int j = 0; j < (list.size() - 2); ++j) {
+                                if (j == 0) {
+                                    dir = list[j];
+                                } else {
+                                    dir += "/" + list[j];
                                 }
                             }
                         }
