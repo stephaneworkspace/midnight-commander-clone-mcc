@@ -140,27 +140,27 @@ void Dialog::setList(QString side)
             Entry *entry = new Entry();
             if (!strcmp(lecture->d_name, "..")) {
                 if (this->getPath(side) != "/") {
-                    entry->setValue(Type::Directory, lecture->d_name, 0, modif);
+                    entry->setValue(Type::Directory, lecture->d_name, 0, modif, 0);
                 }
             } else {
                 if (S_ISDIR(buf.st_mode)) {
                     QString qstringTemp = lecture->d_name;
                     qstringTemp += "/";
-                    entry->setValue(Type::Directory, qstringTemp, 0, modif);
+                    entry->setValue(Type::Directory, qstringTemp, 0, modif, buf.st_mode);
                 } else if (S_ISBLK(buf.st_mode)) {
-                    entry->setValue(Type::DeviceBloc, lecture->d_name, size, modif); // TODO test if size
+                    entry->setValue(Type::DeviceBloc, lecture->d_name, size, modif, buf.st_mode); // TODO test if size
                 } else if(S_ISCHR(buf.st_mode)) {
-                    entry->setValue(Type::DeviceCharacter, lecture->d_name, size, modif); // TODO test if size
+                    entry->setValue(Type::DeviceCharacter, lecture->d_name, size, modif, buf.st_mode); // TODO test if size
                 } else if(S_ISFIFO(buf.st_mode)) {
-                    entry->setValue(Type::Fifo, lecture->d_name, size, modif); // TODO test if size
+                    entry->setValue(Type::Fifo, lecture->d_name, size, modif, buf.st_mode); // TODO test if size
                 } else if(S_ISLNK(buf.st_mode)) {
-                    entry->setValue(Type::SymbolicLink, lecture->d_name, size, modif); // TODO test if size
+                    entry->setValue(Type::SymbolicLink, lecture->d_name, size, modif, buf.st_mode); // TODO test if size
                 } else if(S_ISSOCK(buf.st_mode)) {
-                    entry->setValue(Type::Socket, lecture->d_name, size, modif); // TODO test if size
+                    entry->setValue(Type::Socket, lecture->d_name, size, modif, buf.st_mode); // TODO test if size
                 } else if(S_ISREG(buf.st_mode)) {
-                    entry->setValue(Type::File, lecture->d_name, size, modif);
+                    entry->setValue(Type::File, lecture->d_name, size, modif, buf.st_mode);
                 } else {
-                    entry->setValue(Type::Other, lecture->d_name, size, modif);
+                    entry->setValue(Type::Other, lecture->d_name, size, modif, buf.st_mode);
                 }
             }
             vec_entry.append(entry);
@@ -175,16 +175,18 @@ void Dialog::setList(QString side)
     if (side == "L") {
         ui->pathLeft->setText(this->getPath(side));
         ui->pathLeft->adjustSize();
-        ui->tableWidgetLeft->setColumnCount(3);
+        ui->tableWidgetLeft->setColumnCount(4);
         ui->tableWidgetLeft->setHorizontalHeaderItem(0, new QTableWidgetItem("Nom"));
         ui->tableWidgetLeft->setHorizontalHeaderItem(1, new QTableWidgetItem("Taille"));
         ui->tableWidgetLeft->setHorizontalHeaderItem(2, new QTableWidgetItem("Date de modification"));
+        ui->tableWidgetLeft->setHorizontalHeaderItem(3, new QTableWidgetItem("Permissions"));
         int i = 0;
         foreach(Entry *v, vec_entry) {
             ui->tableWidgetLeft->insertRow(i);
             ui->tableWidgetLeft->setItem(i, 0, new QTableWidgetItem(v->getName(),Qt::DisplayRole));
-                ui->tableWidgetLeft->setItem(i, 1, new QTableWidgetItem(v->getSizeString(2))); // TODO const
+            ui->tableWidgetLeft->setItem(i, 1, new QTableWidgetItem(v->getSizeString(2))); // TODO const
             ui->tableWidgetLeft->setItem(i, 2, new QTableWidgetItem(v->getDateLastChangeString()));
+            ui->tableWidgetLeft->setItem(i, 3, new QTableWidgetItem(v->getMode()));
             i++;
         }
         ui->tableWidgetLeft->adjustSize();
@@ -192,16 +194,18 @@ void Dialog::setList(QString side)
     } else if (side == "R") {
         ui->pathRight->setText(this->getPath(side));
         ui->pathRight->adjustSize();
-        ui->tableWidgetRight->setColumnCount(3);
+        ui->tableWidgetRight->setColumnCount(4);
         ui->tableWidgetRight->setHorizontalHeaderItem(0, new QTableWidgetItem("Nom"));
         ui->tableWidgetRight->setHorizontalHeaderItem(1, new QTableWidgetItem("Taille"));
         ui->tableWidgetRight->setHorizontalHeaderItem(2, new QTableWidgetItem("Date de modification"));
+        ui->tableWidgetRight->setHorizontalHeaderItem(3, new QTableWidgetItem("Permissions"));
         int i = 0;
         foreach(Entry *v, vec_entry) {
             ui->tableWidgetRight->insertRow(i);
             ui->tableWidgetRight->setItem(i, 0, new QTableWidgetItem(v->getName()));
             ui->tableWidgetRight->setItem(i, 1, new QTableWidgetItem(v->getSizeString(2))); // TODO const
             ui->tableWidgetRight->setItem(i, 2, new QTableWidgetItem(v->getDateLastChangeString()));
+            ui->tableWidgetRight->setItem(i, 3, new QTableWidgetItem(v->getMode()));
             i++;
         }
         ui->tableWidgetRight->adjustSize();

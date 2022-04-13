@@ -7,20 +7,22 @@ Entry::Entry(QObject *parent)
 
 }
 
-Entry::Entry(Type type, QString name, int size_file, QDateTime date_last_modif)
+Entry::Entry(Type type, QString name, int size_file, QDateTime date_last_change, mode_t mode)
 {
     this->type = type;
     this->name = name;
     this->size_file = size_file;
-    this->date_last_change = date_last_modif;
+    this->date_last_change = date_last_change;
+    this->mode = mode;
 }
 
-void Entry::setValue(Type type, QString name, int size_file, QDateTime date_last_modif)
+void Entry::setValue(Type type, QString name, int size_file, QDateTime date_last_change, mode_t mode)
 {
     this->type = type;
     this->name = name;
     this->size_file = size_file;
-    this->date_last_change = date_last_modif;
+    this->date_last_change = date_last_change;
+    this->mode = mode;
 }
 
 QString Entry::getName()
@@ -58,4 +60,13 @@ QString Entry::getSizeString(int decimals) {
 
 QString Entry::getDateLastChangeString() {
     return this->date_last_change.toString("dd.MM.yyyy hh:mm:ss");
+}
+
+QString Entry::getMode() {
+    QString buf;
+    const char chars[] = "rwxrwxrwx";
+    for (size_t i = 0; i < 9; i++) {
+        buf += (this->mode & (1 << (8-i))) ? chars[i] : '-';
+    }
+    return buf;
 }

@@ -14,18 +14,20 @@ class Entry : public QObject
     Q_OBJECT
 public:
     explicit Entry(QObject *parent = nullptr);
-    Entry(Type type, QString name, int size_file, QDateTime date_last_modif);
-    void setValue(Type type, QString name, int size_file, QDateTime date_last_modif);
+    Entry(Type type, QString name, int size_file, QDateTime date_last_change, mode_t mode);
+    void setValue(Type type, QString name, int size_file, QDateTime date_last_change, mode_t mode);
     QString getName();
     int getOrder();
     QString getSizeString(int decimals);
     QString getDateLastChangeString();
+    QString getMode();
 signals:
 private:
     QString name;
     Type type;
     int size_file;
     QDateTime date_last_change;
+    mode_t mode;
 };
 
 #endif // ENTRY_H
