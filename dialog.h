@@ -39,6 +39,7 @@ private slots:
 private:
     Ui::Dialog *ui;
     QHash<QString, QString> hash_path;
+    QHash<QString, QVector<Entry*>> hash_side_entry;
     void setList(QString side);
     void setDir(QString dir, QString side);
     QString getPath (QString side);

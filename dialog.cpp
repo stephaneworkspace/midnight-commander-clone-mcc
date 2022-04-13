@@ -205,10 +205,16 @@ void Dialog::setList(QString side)
         ui->tableWidgetRight->adjustSize();
         ui->tableWidgetRight->resizeColumnsToContents();
     }
+    this->hash_side_entry.insert(side, vec_entry);
 }
 
 void Dialog::setDir(QString dir, QString side) {
     this->hash_path.insert(side, dir);
+    if (side == "L") {
+        ui->pathLeft->setText(dir);
+    } else if (side == "R") {
+        ui->pathRight->setText(dir);
+    }
     this->setList(side);
 }
 
@@ -276,6 +282,8 @@ void Dialog::execCmd(QString cmd, QString side) {
                             }
                         }
                         cmd = "cd " + dir;
+                        // debug here
+                        this->hash_path.insert(side, dir);
                         swFirstTime = false;
                         goto begin;
                     }
@@ -316,25 +324,45 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
         if ( (key->key() == Qt::Key_Enter) || (key->key() == Qt::Key_Return) ) {
             QWidget* fw = this->focusWidget();
             if (fw != Q_NULLPTR) {
-                qDebug() << fw->objectName();
-                QTableWidget* fwtable = dynamic_cast<QTableWidget *>(this->focusWidget());
-                qDebug() << fwtable->currentRow();
-                //qDebug() << fwtable->currentItem();
-                /*if (fw->objectName() == "tableWidgetLeft") {
-                    QString cmd;
-                    this->execCmd(cmd,"L");
-                } else if (fw->objectName() == "tableWidgetRight") {
-                    QString cmd;
-                    this->execCmd(cmd,"R");
-                }*/
-                //Enter or return was pressed
-                QMessageBox msgBox;
-                msgBox.setText("Key enter");
-                msgBox.setInformativeText("Cell entered");
-                msgBox.setStandardButtons(QMessageBox::Ok);
-                msgBox.setDefaultButton(QMessageBox::Ok);
-                msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
-                msgBox.exec();
+                if (fw->objectName() == "tableWidgetLeft" || fw->objectName() == "tableWidgetRight") {
+                    QTableWidget *fwtable = dynamic_cast<QTableWidget *>(this->focusWidget());
+                    QString side;
+                    QString dir;
+                    if (fw->objectName() == "tableWidgetLeft") {
+                        side = "L";
+                        dir = ui->pathLeft->text();
+                    } else if (fw->objectName() == "tableWidgetRight") {
+                        side = "R";
+                        dir = ui->pathRight->text();
+                    }
+                    QVector<Entry*> vec_entry = this->hash_side_entry[side];
+                    QString dir_enter = vec_entry.takeAt(fwtable->currentRow())->getName();
+                    if (dir_enter == "..") {
+                        if (dir == "/") {
+                            // TODO fix this bug
+                        } else {
+                            QString lastIndex = "/";
+                            int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
+                            if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
+                                this->setDir("/", side);
+                            } else {
+                                QStringList list = dir.split('/');
+                                dir = "";
+                                for (int j = 0; j < (list.size() - 2); ++j) {
+                                    if (j == 0) {
+                                        dir = list[j];
+                                    } else {
+                                        dir += "/" + list[j];
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        dir += dir_enter;
+                    }
+                    this->setDir(dir, side);
+                    this->execCmd("cd " + dir,side);
+                }
             }
         } else {
             return QObject::eventFilter(obj, event);
