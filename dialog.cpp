@@ -10,6 +10,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QKeyEvent>
+#include <QProcess>
 #include "entry.h"
 
 Dialog::Dialog(QWidget *parent)
@@ -312,23 +313,33 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
                         dir = ui->pathRight->text();
                     }
                     QVector<Entry*> vec_entry = this->hash_side_entry[side];
-                    QString dir_enter = vec_entry.takeAt(fwtable->currentRow())->getName();
-                    if (dir_enter == "..") {
-                        QString lastIndex = "/";
-                        int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
-                        if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
-                            this->setDir("/", side);
+                    QString entry = vec_entry.takeAt(fwtable->currentRow())->getName();
+                    if (vec_entry.takeAt(fwtable->currentRow())->getType() == Type::File) {
+                        QProcess *process = new QProcess(this);
+                        QString program = "/usr/bin/open";
+                        QStringList args;
+                        args << dir + entry;
+                        process->setProgram(program);
+                        process->setArguments(args);
+                        process->start();
+                    } else if (vec_entry.takeAt(fwtable->currentRow())->getType() == Type::Directory) {
+                        if (entry == "..") {
+                            QString lastIndex = "/";
+                            int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
+                            if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
+                                this->setDir("/", side);
+                            } else {
+                                dir = this->minusOneLevel(dir);
+                            }
                         } else {
-                            dir = this->minusOneLevel(dir);
+                            dir += entry;
                         }
-                    } else {
-                        dir += dir_enter;
+                        if (dir == "") {
+                            dir = "/";
+                        }
+                        this->setDir(dir, side);
+                        this->execCmd("cd " + dir,side);
                     }
-                    if (dir == "") {
-                        dir = "/";
-                    }
-                    this->setDir(dir, side);
-                    this->execCmd("cd " + dir,side);
                 }
             }
         } else {
@@ -358,20 +369,30 @@ void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
     QString side = "L";
     QString dir = ui->pathLeft->text();
     QVector<Entry*> vec_entry = this->hash_side_entry[side];
-    QString dir_enter = vec_entry.takeAt(ui->tableWidgetLeft->currentRow())->getName();
-    if (dir_enter == "..") {
-        QString lastIndex = "/";
-        int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
-        if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
-            this->setDir("/", side);
+    QString entry = vec_entry.takeAt(ui->tableWidgetLeft->currentRow())->getName();
+    if (vec_entry.takeAt(ui->tableWidgetLeft->currentRow())->getType() == Type::File) {
+        QProcess *process = new QProcess(this);
+        QString program = "/usr/bin/open";
+        QStringList args;
+        args << dir + entry;
+        process->setProgram(program);
+        process->setArguments(args);
+        process->start();
+    } else if (vec_entry.takeAt(ui->tableWidgetLeft->currentRow())->getType() == Type::Directory) {
+        if (entry == "..") {
+            QString lastIndex = "/";
+            int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
+            if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
+                this->setDir("/", side);
+            } else {
+                dir = this->minusOneLevel(dir);
+            }
         } else {
-            dir = this->minusOneLevel(dir);
+            dir += entry;
         }
-    } else {
-        dir += dir_enter;
-    }
-    if (dir == "") {
-        dir = "/";
+        if (dir == "") {
+            dir = "/";
+        }
     }
     this->setDir(dir, side);
     this->execCmd("cd " + dir,side);
@@ -383,20 +404,30 @@ void Dialog::on_tableWidgetRight_cellDoubleClicked(int row, int column)
     QString side = "R";
     QString dir = ui->pathRight->text();
     QVector<Entry*> vec_entry = this->hash_side_entry[side];
-    QString dir_enter = vec_entry.takeAt(ui->tableWidgetRight->currentRow())->getName();
-    if (dir_enter == "..") {
-        QString lastIndex = "/";
-        int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
-        if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
-            this->setDir("/", side);
+    QString entry = vec_entry.takeAt(ui->tableWidgetRight->currentRow())->getName();
+    if (vec_entry.takeAt(ui->tableWidgetRight->currentRow())->getType() == Type::File) {
+        QProcess *process = new QProcess(this);
+        QString program = "/usr/bin/open";
+        QStringList args;
+        args << dir + entry;
+        process->setProgram(program);
+        process->setArguments(args);
+        process->start();
+    } else if (vec_entry.takeAt(ui->tableWidgetRight->currentRow())->getType() == Type::Directory) {
+        if (entry == "..") {
+            QString lastIndex = "/";
+            int lastIndexOfSlash = dir.lastIndexOf(lastIndex);
+            if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
+                this->setDir("/", side);
+            } else {
+                dir = this->minusOneLevel(dir);
+            }
         } else {
-            dir = this->minusOneLevel(dir);
+            dir += entry;
         }
-    } else {
-        dir += dir_enter;
-    }
-    if (dir == "") {
-        dir = "/";
+        if (dir == "") {
+            dir = "/";
+        }
     }
     this->setDir(dir, side);
     this->execCmd("cd " + dir,side);

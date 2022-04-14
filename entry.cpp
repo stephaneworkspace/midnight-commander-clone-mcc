@@ -70,3 +70,7 @@ QString Entry::getMode() {
     }
     return buf;
 }
+
+Type Entry::getType() {
+    return this->type;
+}

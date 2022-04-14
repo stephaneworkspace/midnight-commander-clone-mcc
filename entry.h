@@ -21,6 +21,7 @@ public:
     QString getSizeString(int decimals);
     QString getDateLastChangeString();
     QString getMode();
+    Type getType();
 signals:
 private:
     QString name;
