@@ -11,6 +11,7 @@
 #include <QProcess>
 #include "entry.h"
 #include "entrys.h"
+#include "mess.h"
 #include "dialog.h"
 
 Entrys::Entrys(QObject *parent)
@@ -122,15 +123,8 @@ void Entrys::execCmd(QString cmd, QString side) {
                         this->setDir(word + "/", side);
                     }
                 } catch (ErrDirNotFound &e) {
-                    // TODO Class/Method
                     if (swFirstTime) {
-                        QMessageBox msgBox;
-                        msgBox.setText(e.what());
-                        msgBox.setInformativeText(e.description);
-                        msgBox.setStandardButtons(QMessageBox::Ok);
-                        msgBox.setDefaultButton(QMessageBox::Ok);
-                        msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
-                        msgBox.exec();
+                        Mess::DispMess(e);
                     }
                     QString dir = this->getPath(side);
                     QString lastIndex = "/";

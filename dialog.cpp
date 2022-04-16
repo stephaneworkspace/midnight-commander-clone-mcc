@@ -7,6 +7,7 @@
 #include <QMenuBar>
 #include <QKeyEvent>
 #include <QProcess>
+#include "mess.h"
 #include "entry.h"
 
 Dialog::Dialog(QWidget *parent)
@@ -42,7 +43,7 @@ Dialog::Dialog(QWidget *parent)
     this->installEventFilter(this);
 
     // Left - Right QTableWidget
-    if (!swDarkMode) {
+    if (swDarkMode) {
         QPalette paletteL = ui->tableWidgetLeft->palette();
         paletteL.setBrush(QPalette::Highlight,QBrush(Qt::white));
         paletteL.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
@@ -54,33 +55,19 @@ Dialog::Dialog(QWidget *parent)
     }
 
     this->entrys = new Entrys();
-
     try {
         this->entrys->setDir("/Users/stephane/", "L");
     } catch (ErrDirNotFound &e) {
-        // TODO Class/Method
-        QMessageBox msgBox;
-        msgBox.setText(e.what());
-        msgBox.setInformativeText(e.description);
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
-        msgBox.exec();
+        Mess::DispMess(e);
         this->entrys->setDir("/", "L");
     }
     try {
         this->entrys->setDir("/Users/stephane/Code/", "R");
     } catch (ErrDirNotFound &e) {
-        // TODO Class/Method
-        QMessageBox msgBox;
-        msgBox.setText(e.what());
-        msgBox.setInformativeText(e.description);
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
-        msgBox.exec();
+        Mess::DispMess(e);
         this->entrys->setDir("/", "R");
     }
+
     this->setListUi("L");
     this->setListUi("R");
 

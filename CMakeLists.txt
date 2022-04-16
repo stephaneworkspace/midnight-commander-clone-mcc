@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
         entry.cpp
         entrys.h
         entrys.cpp
+        mess.h
+        mess.cpp
         )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
