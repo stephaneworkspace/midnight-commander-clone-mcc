@@ -25,6 +25,7 @@ private slots:
 private:
     Ui::Dialog *ui;
     Entrys *entrys;
+    bool swDarkMode;
     void setListUi(QString side);
     void execCmd(QString cmd, QString side);
     void cellClick(QString side, QString dir, QString key);

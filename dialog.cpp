@@ -15,6 +15,11 @@ Dialog::Dialog(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // Detect dark mode
+    QColor color = QPalette().color(QPalette::Window).value();
+    QColor colorText = QPalette().color(QPalette::WindowText).value();
+    this->swDarkMode = colorText.value() > color.value();
+
     // Menu
     QMenu *i1 = new QMenu("Fichier");
     i1->addAction("cHmod");
@@ -37,14 +42,16 @@ Dialog::Dialog(QWidget *parent)
     this->installEventFilter(this);
 
     // Left - Right QTableWidget
-    QPalette paletteL = ui->tableWidgetLeft->palette();
-    paletteL.setBrush(QPalette::Highlight,QBrush(Qt::white));
-    paletteL.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
-    ui->tableWidgetLeft->setPalette(paletteL);
-    QPalette paletteR = ui->tableWidgetRight->palette();
-    paletteR.setBrush(QPalette::Highlight,QBrush(Qt::white));
-    paletteR.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
-    ui->tableWidgetRight->setPalette(paletteR);
+    if (!swDarkMode) {
+        QPalette paletteL = ui->tableWidgetLeft->palette();
+        paletteL.setBrush(QPalette::Highlight,QBrush(Qt::white));
+        paletteL.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
+        ui->tableWidgetLeft->setPalette(paletteL);
+        QPalette paletteR = ui->tableWidgetRight->palette();
+        paletteR.setBrush(QPalette::Highlight,QBrush(Qt::white));
+        paletteR.setBrush(QPalette::HighlightedText,QBrush(Qt::black));
+        ui->tableWidgetRight->setPalette(paletteR);
+    }
 
     this->entrys = new Entrys();
 
