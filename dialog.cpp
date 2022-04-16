@@ -191,20 +191,9 @@ void Dialog::setListUi(QString side) {
     QString dir = this->entrys->getPath(side);
     if (side == "L") {
         ui->pathLeft->setText(dir);
-    } else if (side == "R") {
-        ui->pathRight->setText(dir);
-    }
-    if (side == "L") {
+        ui->pathLeft->adjustSize();
         ui->tableWidgetLeft->clear();
         ui->tableWidgetLeft->setRowCount(0);
-    } else {
-        ui->tableWidgetRight->clear();
-        ui->tableWidgetRight->setRowCount(0);
-    }
-    // Ui
-    if (side == "L") {
-        ui->pathLeft->setText(dir);
-        ui->pathLeft->adjustSize();
         ui->tableWidgetLeft->setColumnCount(4);
         ui->tableWidgetLeft->setHorizontalHeaderItem(0, new QTableWidgetItem("Nom"));
         ui->tableWidgetLeft->setHorizontalHeaderItem(1, new QTableWidgetItem("Taille"));
@@ -224,6 +213,8 @@ void Dialog::setListUi(QString side) {
     } else if (side == "R") {
         ui->pathRight->setText(dir);
         ui->pathRight->adjustSize();
+        ui->tableWidgetRight->clear();
+        ui->tableWidgetRight->setRowCount(0);
         ui->tableWidgetRight->setColumnCount(4);
         ui->tableWidgetRight->setHorizontalHeaderItem(0, new QTableWidgetItem("Nom"));
         ui->tableWidgetRight->setHorizontalHeaderItem(1, new QTableWidgetItem("Taille"));
