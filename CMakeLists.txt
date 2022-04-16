@@ -21,6 +21,8 @@ set(PROJECT_SOURCES
         dialog.ui
         entry.h
         entry.cpp
+        entrys.h
+        entrys.cpp
         )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

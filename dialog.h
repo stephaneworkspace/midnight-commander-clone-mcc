@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QTableView>
 #include "entry.h"
+#include "entrys.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Dialog; }
@@ -27,7 +28,6 @@ class Dialog : public QDialog
 public:
     Dialog(QWidget *parent = nullptr);
     ~Dialog();
-
 protected:
     bool eventFilter(QObject* obj, QEvent* event);
 private slots:
@@ -38,13 +38,10 @@ private slots:
 
 private:
     Ui::Dialog *ui;
-    QHash<QString, QString> hash_path;
-    QHash<QString, QVector<Entry*>> hash_side_entry;
-    void setList(QString side);
-    void setDir(QString dir, QString side);
-    QString getPath (QString side);
+    Entrys *entrys;
+    void setListUi(QString side);
     void execCmd(QString cmd, QString side);
     QString minusOneLevel(QString dir);
-    struct EntryCompare { bool operator()(Entry *a, Entry *b) const;};
+    void cellClick(QString side, QString dir, QString key);
 };
 #endif // DIALOG_H
