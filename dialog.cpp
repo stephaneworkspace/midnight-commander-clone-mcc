@@ -93,7 +93,7 @@ Dialog::~Dialog()
 void Dialog::execCmd(QString cmd, QString side) {
     this->entrys->execCmd(cmd, side);
     this->setListUi(side);
-    if (side == "L") { // TODO create method focus
+    if (side == "L") {
         ui->tableWidgetLeft->setFocus();
         ui->tableWidgetLeft->selectRow(0);
     } else {
@@ -151,8 +151,7 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
                                 if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
                                     this->entrys->setDir("/", side);
                                 } else {
-                                    dir = this->minusOneLevel(dir);
-                                    dir += "/";
+                                    dir = this->entrys->minusOneLevel(dir);
                                 }
                             } else {
                                 dir += entryName;
@@ -173,19 +172,6 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
     } else {
         return QObject::eventFilter(obj, event);
     }
-}
-
-QString Dialog::minusOneLevel(QString dir) {
-    QStringList list = dir.split('/');
-    dir = "";
-    for (int j = 0; j < (list.size() - 2); ++j) {
-        if (j == 0) {
-            dir = list[j];
-        } else {
-            dir += "/" + list[j];
-        }
-    }
-    return dir;
 }
 
 void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
@@ -287,8 +273,7 @@ void Dialog::cellClick(QString side, QString dir, QString key) {
                 if (dir.data()[0] != '/' || lastIndexOfSlash == -1 || lastIndexOfSlash == 0) {
                     this->entrys->setDir("/", side);
                 } else {
-                    dir = this->minusOneLevel(dir);
-                    dir += "/";
+                    dir = this->entrys->minusOneLevel(dir);
                 }
             } else {
                 dir += entryName;

@@ -165,7 +165,7 @@ QString Entrys::minusOneLevel(QString dir) {
             dir += "/" + list[j];
         }
     }
-    return dir;
+    return dir + "/";
 }
 
 QString Entrys::getPath(QString side) {
