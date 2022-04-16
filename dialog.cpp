@@ -112,7 +112,7 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
                     execCmd(ui->lineEditCmdLeft->text(), "L");
                     ui->lineEditCmdLeft->clear();
                 } else if (fw->objectName() == "lineEditCmdRight") {
-                    execCmd(ui->lineEditCmdRight->text(), "L");
+                    execCmd(ui->lineEditCmdRight->text(), "R");
                     ui->lineEditCmdRight->clear();
                 } else if (fw->objectName() == "tableWidgetLeft" || fw->objectName() == "tableWidgetRight") {
                     QTableWidget *fwtable = dynamic_cast<QTableWidget *>(this->focusWidget());
@@ -178,7 +178,6 @@ void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
 {
     QString side = "L";
     QString dir = ui->pathLeft->text();
-    this->entrys->setDir(dir, side);
     QString key = ui->tableWidgetLeft->item(row,0)->text();
     this->cellClick(side, dir, key);
 }
@@ -188,7 +187,6 @@ void Dialog::on_tableWidgetRight_cellDoubleClicked(int row, int column)
 {
     QString side = "R";
     QString dir = ui->pathRight->text();
-    this->entrys->setDir(dir, side);
     QString key = ui->tableWidgetRight->item(row,0)->text();
     this->cellClick(side, dir, key);
 }
@@ -250,6 +248,7 @@ void Dialog::setListUi(QString side) {
 }
 
 void Dialog::cellClick(QString side, QString dir, QString key) {
+    this->entrys->setDir(dir, side);
     Entry* entry = this->entrys->getEntry(side, key);
     if (entry == nullptr) {
         dir = "/";
