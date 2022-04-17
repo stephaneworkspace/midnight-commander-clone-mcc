@@ -12,7 +12,7 @@ struct ErrDirNotFound: public std::exception {
 };
 
 enum Cmd {
-    cd, None
+    cd, Mkdir, None
 };
 
 class Entrys : public QObject

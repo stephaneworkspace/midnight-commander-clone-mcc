@@ -113,6 +113,8 @@ void Entrys::execCmd(QString cmd, QString side) {
         if (i == 0) {
             if (word == "cd") {
                 c = Cmd::cd;
+            } else if (word == "mkdir") {
+                c = Cmd::Mkdir;
             }
         } else {
             if (c == Cmd::cd) {
@@ -137,6 +139,14 @@ void Entrys::execCmd(QString cmd, QString side) {
                         swFirstTime = false;
                         goto begin;
                     }
+                }
+            } else if (c == Cmd::Mkdir) {
+                // TODO ./
+                mkdir(word.toLocal8Bit(), 0777); // TODO analyse int result
+                if (word.endsWith("/")) {
+                    this->setDir(word, side);
+                } else {
+                    this->setDir(word + "/", side);
                 }
             }
             break;
