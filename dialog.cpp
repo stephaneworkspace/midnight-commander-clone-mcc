@@ -277,7 +277,7 @@ void Dialog::on_pushButton_F7_clicked()
 {
     this->hide();
     QString side = this->sideFocus;
-    dialogPrompt = new DialogPrompt(this, this->entrys->getPath(side));
+    dialogPrompt = new DialogPrompt(this, this->entrys->getPath(side), Prompt::F7);
     dialogPrompt->show();
     dialogPrompt->exec();
     QString path = dialogPrompt->getPath();

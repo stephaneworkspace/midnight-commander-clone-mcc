@@ -9,12 +9,16 @@ namespace Ui {
 class DialogPrompt;
 }
 
+enum Prompt {
+    F7,
+};
+
 class DialogPrompt : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogPrompt(QWidget *parent = nullptr, QString path = "");
+    explicit DialogPrompt(QWidget *parent = nullptr, QString path = "", Prompt prompt = Prompt::F7);
     ~DialogPrompt();
     QString getPath();
 
@@ -26,6 +30,7 @@ private:
     Ui::DialogPrompt *ui;
     QWidget *parent;
     QString path;
+    Prompt prompt;
 };
 
 #endif // DIALOGPROMPT_H
