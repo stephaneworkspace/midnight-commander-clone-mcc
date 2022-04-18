@@ -24,10 +24,13 @@ private slots:
     void on_tableWidgetLeft_cellDoubleClicked(int row, int column);
     void on_tableWidgetRight_cellDoubleClicked(int row, int column);
     void on_pushButton_F7_clicked();
+    void on_tableWidgetLeft_cellClicked(int row, int column);
 
-    void on_tableWidgetLeft_cellActivated(int row, int column);
+    void on_tableWidgetRight_cellClicked(int row, int column);
 
-    void on_tableWidgetRight_cellActivated(int row, int column);
+    void on_tableWidgetLeft_cellEntered(int row, int column);
+
+    void on_tableWidgetRight_cellEntered(int row, int column);
 
 private:
     Ui::Dialog *ui;

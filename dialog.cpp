@@ -69,8 +69,8 @@ Dialog::Dialog(QWidget *parent)
         this->entrys->setDir("/", "R");
     }
 
-    this->setListUi("L");
     this->setListUi("R");
+    this->setListUi("L");
 
     ui->tableWidgetRight->setCurrentIndex(ui->tableWidgetRight->model()->index(0, 0));
     ui->tableWidgetLeft->setCurrentIndex(ui->tableWidgetLeft->model()->index(0, 0));
@@ -85,13 +85,6 @@ Dialog::~Dialog()
 void Dialog::execCmd(QString cmd, QString side) {
     this->entrys->execCmd(cmd, side);
     this->setListUi(side);
-    if (side == "L") {
-        ui->tableWidgetLeft->setFocus();
-        ui->tableWidgetLeft->selectRow(0);
-    } else {
-        ui->tableWidgetRight->setFocus();
-        ui->tableWidgetRight->selectRow(0);
-    }
 }
 
 bool Dialog::eventFilter(QObject *obj, QEvent *event) {
@@ -232,6 +225,13 @@ void Dialog::setListUi(QString side) {
         ui->tableWidgetRight->adjustSize();
         ui->tableWidgetRight->resizeColumnsToContents();
     }
+    if (side == "L") {
+        ui->tableWidgetLeft->setFocus();
+        ui->tableWidgetLeft->selectRow(0);
+    } else {
+        ui->tableWidgetRight->setFocus();
+        ui->tableWidgetRight->selectRow(0);
+    }
 }
 
 void Dialog::cellClick(QString side, QString dir, QString key) {
@@ -276,22 +276,40 @@ void Dialog::cellClick(QString side, QString dir, QString key) {
 void Dialog::on_pushButton_F7_clicked()
 {
     this->hide();
-    dialogPrompt = new DialogPrompt(this, this->entrys->getPath(this->sideFocus));
+    QString side = this->sideFocus;
+    dialogPrompt = new DialogPrompt(this, this->entrys->getPath(side));
     dialogPrompt->show();
     dialogPrompt->exec();
-    if (dialogPrompt->getPath() != "") {
-        this->entrys->setDir(dialogPrompt->getPath(), this->sideFocus);
-        this->setListUi(this->sideFocus);
+    QString path = dialogPrompt->getPath();
+    if (path != "") {
+        if (!path.endsWith("/")) {
+            path = path + "/";
+        }
+        this->entrys->setDir(path, side);
+        this->setListUi(side);
     }
 }
-void Dialog::on_tableWidgetLeft_cellActivated(int row, int column)
+
+void Dialog::on_tableWidgetLeft_cellClicked(int row, int column)
 {
    this->sideFocus = "L";
 }
 
 
-void Dialog::on_tableWidgetRight_cellActivated(int row, int column)
+void Dialog::on_tableWidgetRight_cellClicked(int row, int column)
 {
-    this->sideFocus = "R";
+   this->sideFocus = "R";
+}
+
+
+void Dialog::on_tableWidgetLeft_cellEntered(int row, int column)
+{
+   this->sideFocus = "L";
+}
+
+
+void Dialog::on_tableWidgetRight_cellEntered(int row, int column)
+{
+   this->sideFocus = "R";
 }
 
