@@ -266,3 +266,14 @@ void Dialog::cellClick(QString side, QString dir, QString key) {
         }
     }
 }
+
+void Dialog::on_pushButton_F7_clicked()
+{
+    this->hide();
+    //DialogPrompt dialogPrompt(this);
+    //dialogPrompt.setModal(true);
+    dialogPrompt = new DialogPrompt(this);
+    dialogPrompt->show();
+    // TODO delete DialogPrompt in Destructor
+}
+

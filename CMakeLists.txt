@@ -19,6 +19,9 @@ set(PROJECT_SOURCES
         dialog.cpp
         dialog.h
         dialog.ui
+        dialogprompt.cpp
+        dialogprompt.h
+        dialogprompt.ui
         entry.h
         entry.cpp
         entrys.h

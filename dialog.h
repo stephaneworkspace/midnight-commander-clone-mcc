@@ -5,6 +5,7 @@
 #include <QTableView>
 #include "entry.h"
 #include "entrys.h"
+#include "dialogprompt.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Dialog; }
@@ -22,8 +23,11 @@ protected:
 private slots:
     void on_tableWidgetLeft_cellDoubleClicked(int row, int column);
     void on_tableWidgetRight_cellDoubleClicked(int row, int column);
+    void on_pushButton_F7_clicked();
+
 private:
     Ui::Dialog *ui;
+    DialogPrompt *dialogPrompt;
     Entrys *entrys;
     bool swDarkMode;
     void setListUi(QString side);
