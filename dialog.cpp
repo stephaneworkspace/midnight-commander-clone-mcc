@@ -15,6 +15,7 @@ Dialog::Dialog(QWidget *parent)
     , ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+    this->sideFocus = "L";
 
     // Detect dark mode
     QColor color = QPalette().color(QPalette::Window).value();
@@ -102,9 +103,11 @@ bool Dialog::eventFilter(QObject *obj, QEvent *event) {
                 if (fw->objectName() == "lineEditCmdLeft") {
                     execCmd(ui->lineEditCmdLeft->text(), "L");
                     ui->lineEditCmdLeft->clear();
+                    this->sideFocus = "L";
                 } else if (fw->objectName() == "lineEditCmdRight") {
                     execCmd(ui->lineEditCmdRight->text(), "R");
                     ui->lineEditCmdRight->clear();
+                    this->sideFocus = "R";
                 } else if (fw->objectName() == "tableWidgetLeft" || fw->objectName() == "tableWidgetRight") {
                     QTableWidget *fwtable = dynamic_cast<QTableWidget *>(this->focusWidget());
                     QString side;
@@ -171,6 +174,7 @@ void Dialog::on_tableWidgetLeft_cellDoubleClicked(int row, int column)
     QString dir = ui->pathLeft->text();
     QString key = ui->tableWidgetLeft->item(row,0)->text();
     this->cellClick(side, dir, key);
+    this->sideFocus = "L";
 }
 
 
@@ -180,6 +184,7 @@ void Dialog::on_tableWidgetRight_cellDoubleClicked(int row, int column)
     QString dir = ui->pathRight->text();
     QString key = ui->tableWidgetRight->item(row,0)->text();
     this->cellClick(side, dir, key);
+    this->sideFocus = "R";
 }
 
 void Dialog::setListUi(QString side) {
@@ -271,7 +276,25 @@ void Dialog::cellClick(QString side, QString dir, QString key) {
 void Dialog::on_pushButton_F7_clicked()
 {
     this->hide();
-    dialogPrompt = new DialogPrompt(this);
+    dialogPrompt = new DialogPrompt(this, this->entrys->getPath(this->sideFocus));
     dialogPrompt->show();
+    dialogPrompt->exec();
+    QMessageBox msgBox;
+    msgBox.setText("");
+    msgBox.setInformativeText(dialogPrompt->getPath());
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
+    msgBox.exec();
+}
+void Dialog::on_tableWidgetLeft_cellActivated(int row, int column)
+{
+   this->sideFocus = "L";
+}
+
+
+void Dialog::on_tableWidgetRight_cellActivated(int row, int column)
+{
+    this->sideFocus = "R";
 }
 

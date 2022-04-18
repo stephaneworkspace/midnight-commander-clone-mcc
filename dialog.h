@@ -25,10 +25,15 @@ private slots:
     void on_tableWidgetRight_cellDoubleClicked(int row, int column);
     void on_pushButton_F7_clicked();
 
+    void on_tableWidgetLeft_cellActivated(int row, int column);
+
+    void on_tableWidgetRight_cellActivated(int row, int column);
+
 private:
     Ui::Dialog *ui;
     DialogPrompt *dialogPrompt;
     Entrys *entrys;
+    QString sideFocus;
     bool swDarkMode;
     void setListUi(QString side);
     void execCmd(QString cmd, QString side);
