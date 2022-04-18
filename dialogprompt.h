@@ -15,8 +15,14 @@ public:
     explicit DialogPrompt(QWidget *parent = nullptr);
     ~DialogPrompt();
 
+private slots:
+    void on_buttonBox_rejected();
+
+    void on_buttonBox_accepted();
+
 private:
     Ui::DialogPrompt *ui;
+    QWidget *parent;
 };
 
 #endif // DIALOGPROMPT_H
