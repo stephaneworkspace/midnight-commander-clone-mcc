@@ -279,13 +279,10 @@ void Dialog::on_pushButton_F7_clicked()
     dialogPrompt = new DialogPrompt(this, this->entrys->getPath(this->sideFocus));
     dialogPrompt->show();
     dialogPrompt->exec();
-    QMessageBox msgBox;
-    msgBox.setText("");
-    msgBox.setInformativeText(dialogPrompt->getPath());
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;} QPushButton{ width:250px; font-size: 18px; }");
-    msgBox.exec();
+    if (dialogPrompt->getPath() != "") {
+        this->entrys->setDir(dialogPrompt->getPath(), this->sideFocus);
+        this->setListUi(this->sideFocus);
+    }
 }
 void Dialog::on_tableWidgetLeft_cellActivated(int row, int column)
 {

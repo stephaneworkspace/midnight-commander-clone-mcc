@@ -16,7 +16,7 @@ class DialogPrompt : public QDialog
 public:
     explicit DialogPrompt(QWidget *parent = nullptr, QString path = "");
     ~DialogPrompt();
-    QString getPath(); // TODO protected
+    QString getPath();
 
 private slots:
     void on_buttonBox_rejected();

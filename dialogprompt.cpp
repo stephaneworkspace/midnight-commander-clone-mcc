@@ -17,6 +17,7 @@ DialogPrompt::~DialogPrompt()
 
 void DialogPrompt::on_buttonBox_rejected()
 {
+    this->path = "";
     this->parent->show();
     this->close();
 }
