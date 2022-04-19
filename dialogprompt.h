@@ -10,7 +10,8 @@ class DialogPrompt;
 }
 
 enum Prompt {
-    F7,
+    F7, // mkdir
+    F6 // rename move
 };
 
 class DialogPrompt : public QDialog
@@ -18,7 +19,7 @@ class DialogPrompt : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogPrompt(QWidget *parent = nullptr, QString path = "", Prompt prompt = Prompt::F7);
+    explicit DialogPrompt(QWidget *parent = nullptr, QString path = "", Prompt prompt = Prompt::F7, QString rename = "");
     ~DialogPrompt();
     QString getPath();
 
@@ -30,6 +31,7 @@ private:
     Ui::DialogPrompt *ui;
     QWidget *parent;
     QString path;
+    QString rename;
     Prompt prompt;
 };
 

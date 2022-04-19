@@ -32,6 +32,8 @@ private slots:
 
     void on_tableWidgetRight_cellEntered(int row, int column);
 
+    void on_pushButton_F6_clicked();
+
 private:
     Ui::Dialog *ui;
     DialogPrompt *dialogPrompt;

@@ -201,7 +201,7 @@ void Dialog::setListUi(QString side) {
                 ui->tableWidgetLeft->setItem(i, 3, new QTableWidgetItem(v->getMode()));
                 i++;
             }
-        ui->tableWidgetLeft->adjustSize();
+        //ui->tableWidgetLeft->adjustSize();
         ui->tableWidgetLeft->resizeColumnsToContents();
     } else if (side == "R") {
         ui->pathRight->setText(dir);
@@ -222,12 +222,13 @@ void Dialog::setListUi(QString side) {
                 ui->tableWidgetRight->setItem(i, 3, new QTableWidgetItem(v->getMode()));
                 i++;
             }
-        ui->tableWidgetRight->adjustSize();
+        //ui->tableWidgetRight->adjustSize();
         ui->tableWidgetRight->resizeColumnsToContents();
     }
     if (side == "L") {
         ui->tableWidgetLeft->setFocus();
-        ui->tableWidgetLeft->selectRow(0);
+        ui->tableWidgetLeft->selectRow(0); // TODO rename
+        // TODO cursor wheel to selectRow 0 if F7
     } else {
         ui->tableWidgetRight->setFocus();
         ui->tableWidgetRight->selectRow(0);
@@ -313,3 +314,26 @@ void Dialog::on_tableWidgetRight_cellEntered(int row, int column)
    this->sideFocus = "R";
 }
 
+
+void Dialog::on_pushButton_F6_clicked()
+{
+    this->hide();
+    QString side = this->sideFocus;
+    if (side == "L") {
+        side = "R";
+    } else if (side == "R") {
+        side = "L";
+    }
+    dialogPrompt = new DialogPrompt(this, this->entrys->getPath(side), Prompt::F6, "test");
+    dialogPrompt->show();
+    dialogPrompt->exec();
+    QString path = dialogPrompt->getPath();
+    if (path != "") {
+        if (!path.endsWith("/")) {
+            path = path + "/";
+        }
+        this->entrys->setDir(path, side); // Other side
+        this->setListUi(side);
+    }
+
+}
