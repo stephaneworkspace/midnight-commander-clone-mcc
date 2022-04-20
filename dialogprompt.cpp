@@ -16,7 +16,7 @@ DialogPrompt::DialogPrompt(QWidget *parent, QString path, Prompt prompt, QString
     } else if (this->prompt == Prompt::F6) {
         this->rename = rename;
         if (this->rename == "..") {
-            // TODO forbiden avant
+            // TODO forbiden avant, pas de copie ..
         } else {
             ui->lineEdit->setText(this->rename);
         }

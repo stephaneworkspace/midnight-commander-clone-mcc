@@ -111,13 +111,15 @@ void Entrys::execCmd(QString cmd, QString side) {
     Cmd c = Cmd::None;
     foreach(const QString &word, words_list) {
         if (i == 0) {
-            if (word == "cd") {
-                c = Cmd::cd;
+            if (word == "Cd") {
+                c = Cmd::Cd;
             } else if (word == "mkdir") {
                 c = Cmd::Mkdir;
+            } else if (word == "cp") {
+                c = Cmd::Cp;
             }
         } else {
-            if (c == Cmd::cd) {
+            if (c == Cmd::Cd) {
                 try {
                     if (word.endsWith("/")) {
                         this->setDir(word, side);
@@ -135,7 +137,7 @@ void Entrys::execCmd(QString cmd, QString side) {
                         this->setDir("/", side);
                     } else {
                         dir = this->minusOneLevel(dir);
-                        cmd = "cd " + dir;
+                        cmd = "Cd " + dir;
                         swFirstTime = false;
                         goto begin;
                     }
@@ -148,6 +150,8 @@ void Entrys::execCmd(QString cmd, QString side) {
                 } else {
                     this->setDir(word + "/", side);
                 }
+            } else if (c == Cmd::Cp) {
+                // TODO Cp
             }
             break;
         }
