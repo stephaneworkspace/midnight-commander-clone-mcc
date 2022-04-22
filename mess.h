@@ -10,6 +10,7 @@ class Mess : public QObject
 public:
     explicit Mess(QObject *parent = nullptr);
     static void DispMess(ErrDirNotFound &e);
+    static void DispMessQString(QString msg, QString informativeMsg);
 signals:
 
 };

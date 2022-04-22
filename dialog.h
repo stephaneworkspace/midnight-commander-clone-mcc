@@ -34,6 +34,8 @@ private slots:
 
     void on_pushButton_F6_clicked();
 
+    void on_pushButton_F5_clicked();
+
 private:
     Ui::Dialog *ui;
     DialogPrompt *dialogPrompt;

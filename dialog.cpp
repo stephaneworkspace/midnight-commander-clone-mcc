@@ -337,3 +337,21 @@ void Dialog::on_pushButton_F6_clicked()
     }
 
 }
+
+void Dialog::on_pushButton_F5_clicked()
+{
+   // Copier
+   //QString side = this->sideFocus;
+   if (this->entrys->getPath("L") == this->entrys->getPath("R")) {
+       // Ne pas se copier sur sois même
+       int row_L = ui->tableWidgetLeft->currentRow();
+       QString key_L = ui->tableWidgetLeft->item(row_L,0)->text();
+       int row_R = ui->tableWidgetRight->currentRow();
+       QString key_R = ui->tableWidgetRight->item(row_R,0)->text();
+       if (key_L == key_R) {
+           Mess::DispMessQString("Copier","Ne peut pas se copier sur sois même");
+           return;
+       }
+   }
+}
+
