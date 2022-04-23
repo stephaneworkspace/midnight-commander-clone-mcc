@@ -286,7 +286,7 @@ void Dialog::on_pushButton_F7_clicked()
         if (!path.endsWith("/")) {
             path = path + "/";
         }
-        this->entrys->setDir(path, side);
+        this->entrys->setDir(path, side); // TODO param option F7 goto dir
         this->setListUi(side);
     }
 }
@@ -314,30 +314,44 @@ void Dialog::on_tableWidgetRight_cellEntered(int row, int column)
    this->sideFocus = "R";
 }
 
-
+/*
+ * F6 Déplacer
+ */
 void Dialog::on_pushButton_F6_clicked()
 {
     this->hide();
     QString side = this->sideFocus;
+    QString rename = "";
+    QString sideOrigin = side;
+    QString keyOrigin = "";
     if (side == "L") {
+        int row = ui->tableWidgetLeft->currentRow();
+        rename = ui->tableWidgetLeft->item(row,0)->text();
         side = "R";
     } else if (side == "R") {
+        int row = ui->tableWidgetRight->currentRow();
+        rename = ui->tableWidgetRight->item(row,0)->text();
         side = "L";
     }
-    dialogPrompt = new DialogPrompt(this, this->entrys->getPath(side), Prompt::F6, "test");
-    dialogPrompt->show();
-    dialogPrompt->exec();
-    QString path = dialogPrompt->getPath();
-    if (path != "") {
-        if (!path.endsWith("/")) {
-            path = path + "/";
+    if (rename != "") {
+        dialogPrompt = new DialogPrompt(this, this->entrys->getPath(side), Prompt::F6, rename, this->entrys->getPath(sideOrigin));
+        dialogPrompt->show();
+        dialogPrompt->exec();
+        QString path = dialogPrompt->getPath();
+        if (path != "") {
+            // Ce code ne semble inutile c'est du copier coller F7 Créer
+            if (!path.endsWith("/")) {
+                path = path + "/";
+            }
+            this->entrys->setDir(path, side); // Other side
+            this->setListUi(side);
         }
-        this->entrys->setDir(path, side); // Other side
-        this->setListUi(side);
     }
-
 }
 
+/*
+ * F5 Copier
+ */
 void Dialog::on_pushButton_F5_clicked()
 {
    // Copier

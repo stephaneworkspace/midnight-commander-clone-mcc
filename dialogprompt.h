@@ -19,7 +19,7 @@ class DialogPrompt : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogPrompt(QWidget *parent = nullptr, QString path = "", Prompt prompt = Prompt::F7, QString rename = "");
+    explicit DialogPrompt(QWidget *parent = nullptr, QString path = "", Prompt prompt = Prompt::F7, QString rename = "", QString origin = "");
     ~DialogPrompt();
     QString getPath();
 
@@ -32,6 +32,7 @@ private:
     QWidget *parent;
     QString path;
     QString rename;
+    QString origin;
     Prompt prompt;
 };
 
