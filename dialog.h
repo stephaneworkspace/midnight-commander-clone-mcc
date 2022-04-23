@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QTableView>
+#include <filesystem>
 #include "entry.h"
 #include "entrys.h"
 #include "dialogprompt.h"
@@ -10,6 +11,8 @@
 QT_BEGIN_NAMESPACE
 namespace Ui { class Dialog; }
 QT_END_NAMESPACE
+
+namespace fs = std::filesystem;
 
 class Dialog : public QDialog
 {

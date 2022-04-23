@@ -351,6 +351,109 @@ void Dialog::on_pushButton_F5_clicked()
        if (key_L == key_R) {
            Mess::DispMessQString("Copier","Ne peut pas se copier sur sois même");
            return;
+       } else {
+           QString side = this->sideFocus;
+           if (side == "L") {
+               for (int i = 0; i < ui->tableWidgetRight->rowCount(); i++) {
+                   QString key_R = ui->tableWidgetRight->item(i,0)->text();
+                   if (key_L == key_R) {
+                       Mess::DispMessQString("Copier","Ne peut pas se copier sur sois même");
+                       return;
+                   }
+               }
+           } else if (side == "R") {
+               for (int i = 0; i < ui->tableWidgetLeft->rowCount(); i++) {
+                   QString key_R = ui->tableWidgetLeft->item(i,0)->text();
+                   if (key_L == key_R) {
+                       Mess::DispMessQString("Copier","Ne peut pas se copier sur sois même");
+                       return;
+                   }
+               }
+           }
+           try {
+               if (side == "L") {
+                   QString copy_L = ui->pathLeft->text() + key_L;
+                   QByteArray c_L_ba = copy_L.toLocal8Bit();
+                   const char *c_L = c_L_ba.data();
+                   QString copy_R = ui->pathRight->text() + key_L;
+                   QByteArray c_R_ba = copy_R.toLocal8Bit();
+                   const char *c_R = c_R_ba.data();
+                   fs::copy(c_L, c_R, fs::copy_options::recursive /*| fs::copy_options::overwrite_existing*/);
+                   this->entrys->setDir(ui->pathRight->text(), "R");
+                   this->setListUi("R");
+               } else if (side == "R") {
+                   QString copy_L = ui->pathLeft->text() + key_R;
+                   QByteArray c_L_ba = copy_L.toLocal8Bit();
+                   const char *c_L = c_L_ba.data();
+                   QString copy_R = ui->pathRight->text() + key_R;
+                   QByteArray c_R_ba = copy_R.toLocal8Bit();
+                   const char *c_R = c_R_ba.data();
+                   fs::copy(c_R, c_L, fs::copy_options::recursive /*| fs::copy_options::overwrite_existing*/);
+                   this->entrys->setDir(ui->pathLeft->text(), "L");
+                   this->setListUi("L");
+               }
+           } catch(fs::filesystem_error& e) {
+               Mess::DispMess(e);
+           } catch(std::bad_alloc& e) {
+               Mess::DispMess(e);
+           } catch (std::exception& e) { // Not using fs::filesystem_error since std::bad_alloc can throw too.
+               // Handle exception or use error code overload of fs::copy.
+               Mess::DispMess(e);
+           }
+       }
+   } else {
+       // TODO tester recurssion infinie si ça existe (surtout pour F6 déplacer)
+       int row_L = ui->tableWidgetLeft->currentRow();
+       QString key_L = ui->tableWidgetLeft->item(row_L,0)->text();
+       int row_R = ui->tableWidgetRight->currentRow();
+       QString key_R = ui->tableWidgetRight->item(row_R,0)->text();
+       QString side = this->sideFocus;
+       if (side == "L") {
+           for (int i = 0; i < ui->tableWidgetRight->rowCount(); i++) {
+               QString key_R = ui->tableWidgetRight->item(i,0)->text();
+               if (key_L == key_R) {
+                   Mess::DispMessQString("Copier","Existe déjà"); // TODO faire mieux
+                   return;
+               }
+           }
+       } else if (side == "R") {
+           for (int i = 0; i < ui->tableWidgetLeft->rowCount(); i++) {
+               QString key_R = ui->tableWidgetLeft->item(i,0)->text();
+               if (key_L == key_R) {
+                   Mess::DispMessQString("Copier","Existe déjà"); // TODO faire mieux
+                   return;
+               }
+           }
+       }
+       try {
+           if (side == "L") {
+               QString copy_L = ui->pathLeft->text() + key_L;
+               QByteArray c_L_ba = copy_L.toLocal8Bit();
+               const char *c_L = c_L_ba.data();
+               QString copy_R = ui->pathRight->text() + key_L;
+               QByteArray c_R_ba = copy_R.toLocal8Bit();
+               const char *c_R = c_R_ba.data();
+               fs::copy(c_L, c_R, fs::copy_options::recursive /*| fs::copy_options::overwrite_existing*/);
+               this->entrys->setDir(ui->pathRight->text(), "R");
+               this->setListUi("R");
+           } else if (side == "R") {
+               QString copy_L = ui->pathLeft->text() + key_R;
+               QByteArray c_L_ba = copy_L.toLocal8Bit();
+               const char *c_L = c_L_ba.data();
+               QString copy_R = ui->pathRight->text() + key_R;
+               QByteArray c_R_ba = copy_R.toLocal8Bit();
+               const char *c_R = c_R_ba.data();
+               fs::copy(c_R, c_L, fs::copy_options::recursive /*| fs::copy_options::overwrite_existing*/);
+               this->entrys->setDir(ui->pathLeft->text(), "L");
+               this->setListUi("L");
+           }
+       } catch(fs::filesystem_error& e) {
+           Mess::DispMess(e);
+       } catch(std::bad_alloc& e) {
+           Mess::DispMess(e);
+       } catch (std::exception& e) { // Not using fs::filesystem_error since std::bad_alloc can throw too.
+           // Handle exception or use error code overload of fs::copy.
+           Mess::DispMess(e);
        }
    }
 }
