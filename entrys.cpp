@@ -23,13 +23,15 @@ Entrys::Entrys(QObject *parent)
 void Entrys::setList(QString side) {
     QVector<Entry*> vec_entry;
     QString path = this->getPath(side);
+    QByteArray path_ba = path.toLocal8Bit();
+    const char* path_cstr = path_ba.data();
     struct dirent *lecture;
     DIR *dir;
     struct stat buf;
     QString currentPath;
     int row = 0;
 
-    dir = opendir(path.toLocal8Bit()); // "." windows "C://"
+    dir = opendir(path_cstr); // "." windows "C://"
     if (dir == NULL) {
         ErrDirNotFound e;
         QString description = "Le répertoire " + path + " n'existe pas";
@@ -40,7 +42,7 @@ void Entrys::setList(QString side) {
     while ((lecture = readdir(dir)) != NULL) {
         if (strcmp(lecture->d_name, ".") != 0) {
             currentPath = path + lecture->d_name;
-            const char *charCurrentPath = currentPath.toLocal8Bit();
+            const char *charCurrentPath = currentPath.toLocal8Bit().data();
             if ((stat(charCurrentPath, &buf)) == -1) {
                 qCritical() << "stat" << currentPath;
                 /*

@@ -42,7 +42,7 @@ void DialogPrompt::on_buttonBox_accepted()
 {
     if (this->prompt == Prompt::F7) {
         this->path = this->path + ui->lineEdit->text();
-        mkdir(this->path.toLocal8Bit(), 0777); // TODO analyse int result
+        mkdir(this->path.toLocal8Bit().data(), 0777); // TODO analyse int result
     } else if (this->prompt == Prompt::F6) {
 
     }
