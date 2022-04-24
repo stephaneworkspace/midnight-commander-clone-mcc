@@ -26,7 +26,7 @@ DialogPrompt::DialogPrompt(QWidget *parent, QString path, Prompt prompt, QString
             if (lastIndexOfSlash > 0) {
                 this->swDir = true;
                 ui->lineEdit->setText(this->rename.split('/')[0]);
-            } else if (lastIndexOfSlash = 0){
+            } else if (lastIndexOfSlash == 0){
                 // 0 à la position 0 c'est faux
                 // TODO Mess déplacement impossible
                 this->reject();
@@ -65,8 +65,6 @@ void DialogPrompt::on_buttonBox_accepted()
         if (ui->lineEdit->text() == "") {
             this->reject(); // TODO message
         } else {
-            // TODO reject if contains more 1 / ou d.split('/')[0]
-            // TODO catch move infini
             try {
                 QString from = this->origin;
                 QByteArray from_ba = from.toLocal8Bit();
