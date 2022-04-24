@@ -390,20 +390,20 @@ void Dialog::on_pushButton_F5_clicked()
                if (side == "L") {
                    QString copy_L = ui->pathLeft->text() + key_L;
                    QByteArray c_L_ba = copy_L.toLocal8Bit();
-                   const char *c_L = c_L_ba.data();
+                   const char *c_L = c_L_ba.constData();
                    QString copy_R = ui->pathRight->text() + key_L;
                    QByteArray c_R_ba = copy_R.toLocal8Bit();
-                   const char *c_R = c_R_ba.data();
+                   const char *c_R = c_R_ba.constData();
                    fs::copy(c_L, c_R, fs::copy_options::recursive /*| fs::copy_options::overwrite_existing*/);
                    this->entrys->setDir(ui->pathRight->text(), "R");
                    this->setListUi("R");
                } else if (side == "R") {
                    QString copy_L = ui->pathLeft->text() + key_R;
                    QByteArray c_L_ba = copy_L.toLocal8Bit();
-                   const char *c_L = c_L_ba.data();
+                   const char *c_L = c_L_ba.constData();
                    QString copy_R = ui->pathRight->text() + key_R;
                    QByteArray c_R_ba = copy_R.toLocal8Bit();
-                   const char *c_R = c_R_ba.data();
+                   const char *c_R = c_R_ba.constData();
                    fs::copy(c_R, c_L, fs::copy_options::recursive /*| fs::copy_options::overwrite_existing*/);
                    this->entrys->setDir(ui->pathLeft->text(), "L");
                    this->setListUi("L");
@@ -445,20 +445,20 @@ void Dialog::on_pushButton_F5_clicked()
            if (side == "L") {
                QString copy_L = ui->pathLeft->text() + key_L;
                QByteArray c_L_ba = copy_L.toLocal8Bit();
-               const char *c_L = c_L_ba.data();
+               const char *c_L = c_L_ba.constData();
                QString copy_R = ui->pathRight->text() + key_L;
                QByteArray c_R_ba = copy_R.toLocal8Bit();
-               const char *c_R = c_R_ba.data();
+               const char *c_R = c_R_ba.constData();
                fs::copy(c_L, c_R, fs::copy_options::recursive /*| fs::copy_options::overwrite_existing*/);
                this->entrys->setDir(ui->pathRight->text(), "R");
                this->setListUi("R");
            } else if (side == "R") {
                QString copy_L = ui->pathLeft->text() + key_R;
                QByteArray c_L_ba = copy_L.toLocal8Bit();
-               const char *c_L = c_L_ba.data();
+               const char *c_L = c_L_ba.constData();
                QString copy_R = ui->pathRight->text() + key_R;
                QByteArray c_R_ba = copy_R.toLocal8Bit();
-               const char *c_R = c_R_ba.data();
+               const char *c_R = c_R_ba.constData();
                fs::copy(c_R, c_L, fs::copy_options::recursive /*| fs::copy_options::overwrite_existing*/);
                this->entrys->setDir(ui->pathLeft->text(), "L");
                this->setListUi("L");

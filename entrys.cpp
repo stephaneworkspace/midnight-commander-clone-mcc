@@ -24,7 +24,7 @@ void Entrys::setList(QString side) {
     QVector<Entry*> vec_entry;
     QString path = this->getPath(side);
     QByteArray path_ba = path.toLocal8Bit();
-    const char* path_cstr = path_ba.data();
+    const char* path_cstr = path_ba.constData();
     struct dirent *lecture;
     DIR *dir;
     struct stat buf;
@@ -42,7 +42,7 @@ void Entrys::setList(QString side) {
     while ((lecture = readdir(dir)) != NULL) {
         if (strcmp(lecture->d_name, ".") != 0) {
             currentPath = path + lecture->d_name;
-            const char *charCurrentPath = currentPath.toLocal8Bit().data();
+            const char *charCurrentPath = currentPath.toLocal8Bit().constData();
             if ((stat(charCurrentPath, &buf)) == -1) {
                 qCritical() << "stat" << currentPath;
                 /*
@@ -146,7 +146,7 @@ void Entrys::execCmd(QString cmd, QString side) {
                 }
             } else if (c == Cmd::Mkdir) {
                 // TODO ./
-                mkdir(word.toLocal8Bit(), 0777); // TODO analyse int result
+                mkdir(word.toLocal8Bit().constData(), 0777); // TODO analyse int result
                 if (word.endsWith("/")) {
                     this->setDir(word, side);
                 } else {

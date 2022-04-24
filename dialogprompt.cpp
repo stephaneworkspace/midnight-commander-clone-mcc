@@ -59,7 +59,7 @@ void DialogPrompt::on_buttonBox_accepted()
     if (this->prompt == Prompt::F7) {
         // F7 Makedir
         this->path = this->path + ui->lineEdit->text();
-        mkdir(this->path.toLocal8Bit().data(), 0777); // TODO analyse int result + try catch necessaire ?
+        mkdir(this->path.toLocal8Bit().constData(), 0777); // TODO analyse int result + try catch necessaire ?
     } else if (this->prompt == Prompt::F6) {
         // F6 Move/Rename
         if (ui->lineEdit->text() == "") {
@@ -77,7 +77,7 @@ void DialogPrompt::on_buttonBox_accepted()
                     to = this->path + ui->lineEdit->text();
                 }
                 QByteArray to_ba = to.toLocal8Bit();
-                const char *to_cstr = to_ba.constData(); // TODO fix constData inseade data partout !
+                const char *to_cstr = to_ba.constData();
                 fs::rename(from_cstr, to_cstr);
             } catch(fs::filesystem_error& e) {
                 Mess::DispMess(e);
