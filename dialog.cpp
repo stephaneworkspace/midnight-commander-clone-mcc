@@ -281,13 +281,14 @@ void Dialog::on_pushButton_F7_clicked()
     dialogPrompt = new DialogPrompt(this, this->entrys->getPath(side), Prompt::F7);
     dialogPrompt->show();
     dialogPrompt->exec();
+    // TODO tester si reject
     QString path = dialogPrompt->getPath();
     if (path != "") {
         if (!path.endsWith("/")) {
             path = path + "/";
         }
         this->entrys->setDir(path, side); // TODO param option F7 goto dir
-        this->setListUi(side);
+        this->setListUi(side); // TODO deuxième côté peut aussi être affecter avec reposition sur sélection
     }
 }
 

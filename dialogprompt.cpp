@@ -58,8 +58,25 @@ void DialogPrompt::on_buttonBox_accepted()
 {
     if (this->prompt == Prompt::F7) {
         // F7 Makedir
-        this->path = this->path + ui->lineEdit->text();
-        mkdir(this->path.toLocal8Bit().constData(), 0777); // TODO analyse int result + try catch necessaire ?
+        if (ui->lineEdit->text() == "") {
+            Mess::DispMessQString("Erreur", "Votre saisie est vide");
+            this->reject();
+        } else {
+            this->path = this->path + ui->lineEdit->text();
+            try {
+                fs::create_directories(this->path.toLocal8Bit().constData());
+            } catch(fs::filesystem_error& e) {
+                Mess::DispMess(e);
+                this->reject();
+            } catch(std::bad_alloc& e) {
+                Mess::DispMess(e);
+                this->reject();
+            } catch (std::exception& e) { // Not using fs::filesystem_error since std::bad_alloc can throw too.
+                // Handle exception or use error code overload of fs::copy.
+                Mess::DispMess(e);
+                this->reject();
+            }
+        }
     } else if (this->prompt == Prompt::F6) {
         // F6 Move/Rename
         if (ui->lineEdit->text() == "") {
@@ -81,11 +98,14 @@ void DialogPrompt::on_buttonBox_accepted()
                 fs::rename(from_cstr, to_cstr);
             } catch(fs::filesystem_error& e) {
                 Mess::DispMess(e);
+                this->reject();
             } catch(std::bad_alloc& e) {
                 Mess::DispMess(e);
+                this->reject();
             } catch (std::exception& e) { // Not using fs::filesystem_error since std::bad_alloc can throw too.
                 // Handle exception or use error code overload of fs::copy.
                 Mess::DispMess(e);
+                this->reject();
             }
         }
     }
