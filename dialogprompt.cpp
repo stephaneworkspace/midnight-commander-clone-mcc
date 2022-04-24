@@ -63,7 +63,8 @@ void DialogPrompt::on_buttonBox_accepted()
     } else if (this->prompt == Prompt::F6) {
         // F6 Move/Rename
         if (ui->lineEdit->text() == "") {
-            this->reject(); // TODO message
+            Mess::DispMessQString("Erreur", "Votre saisie est vide");
+            this->reject();
         } else {
             try {
                 QString from = this->origin;
