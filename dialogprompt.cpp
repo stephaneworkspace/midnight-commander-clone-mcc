@@ -18,10 +18,23 @@ DialogPrompt::DialogPrompt(QWidget *parent, QString path, Prompt prompt, QString
     } else if (this->prompt == Prompt::F6) {
         this->rename = rename;
         if (this->rename == "" || this->rename == "..") {
-            // TODO tester
+            // TODO tester et Mess
             this->reject();
         } else {
-            ui->lineEdit->setText(this->rename);
+            QString lastIndex = "/";
+            int lastIndexOfSlash = this->rename.lastIndexOf(lastIndex);
+            if (lastIndexOfSlash > 0) {
+                this->swDir = true;
+                ui->lineEdit->setText(this->rename.split('/')[0]);
+            } else if (lastIndexOfSlash = 0){
+                // 0 à la position 0 c'est faux
+                // TODO Mess déplacement impossible
+                this->reject();
+            } else {
+                // -1 n'existe pas
+                this->swDir = false;
+                ui->lineEdit->setText(this->rename);
+            }
         }
         QString msg = "Veuillez valider le déplacement de \"" + this->origin +"\" avec la saisie vers \"" + this->path + "\"."; // TODO custom dir/file...
         ui->label->setText(msg);
@@ -46,12 +59,36 @@ void DialogPrompt::on_buttonBox_accepted()
     if (this->prompt == Prompt::F7) {
         // F7 Makedir
         this->path = this->path + ui->lineEdit->text();
-        mkdir(this->path.toLocal8Bit().data(), 0777); // TODO analyse int result
+        mkdir(this->path.toLocal8Bit().data(), 0777); // TODO analyse int result + try catch necessaire ?
     } else if (this->prompt == Prompt::F6) {
         // F6 Move/Rename
-        Mess::DispMessQString("ui->lineEdit->text()",ui->lineEdit->text());
-        Mess::DispMessQString("this->path",this->path);
-        Mess::DispMessQString("this->origin",this->origin);
+        if (ui->lineEdit->text() == "") {
+            this->reject(); // TODO message
+        } else {
+            // TODO reject if contains more 1 / ou d.split('/')[0]
+            // TODO catch move infini
+            try {
+                QString from = this->origin;
+                QByteArray from_ba = from.toLocal8Bit();
+                const char* from_cstr = from_ba.constData();
+                QString to;
+                if (swDir) {
+                    to = this->path + ui->lineEdit->text() + "/";
+                } else {
+                    to = this->path + ui->lineEdit->text();
+                }
+                QByteArray to_ba = to.toLocal8Bit();
+                const char *to_cstr = to_ba.constData(); // TODO fix constData inseade data partout !
+                fs::rename(from_cstr, to_cstr);
+            } catch(fs::filesystem_error& e) {
+                Mess::DispMess(e);
+            } catch(std::bad_alloc& e) {
+                Mess::DispMess(e);
+            } catch (std::exception& e) { // Not using fs::filesystem_error since std::bad_alloc can throw too.
+                // Handle exception or use error code overload of fs::copy.
+                Mess::DispMess(e);
+            }
+        }
     }
     this->parent->show();
     this->close();

@@ -33,6 +33,7 @@ private:
     QString path;
     QString rename;
     QString origin;
+    bool swDir; // TODO better with entry
     Prompt prompt;
 };
 

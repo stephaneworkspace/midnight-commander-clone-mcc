@@ -343,6 +343,8 @@ void Dialog::on_pushButton_F6_clicked()
             if (!path.endsWith("/")) {
                 path = path + "/";
             }
+            this->entrys->setDir(side == "L" ? ui->pathRight->text() : ui->pathLeft->text(), side == "L" ? "R" : "L"); // Other side
+            this->setListUi(side == "L" ? "R" : "L");
             this->entrys->setDir(path, side); // Other side
             this->setListUi(side);
         }
