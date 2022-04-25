@@ -320,8 +320,32 @@ void Dialog::on_tableWidgetRight_cellEntered(int row, int column)
  */
 void Dialog::on_pushButton_F6_clicked()
 {
-    this->hide();
     QString side = this->sideFocus;
+    int row = side == "L" ? ui->tableWidgetLeft->currentRow() : ui->tableWidgetRight->currentRow();
+    QString key = side == "L" ? ui->tableWidgetLeft->item(row, 0)->text() : ui->tableWidgetRight->item(row, 0)->text();
+    this->entrys->setDir(side == "L" ? ui->pathLeft->text() : ui->pathRight->text(), side); // TODO bypass
+    Entry* entry = this->entrys->getEntry(side, key); // TODO key not found
+    if (entry->getType() == Type::Directory || entry->getType() == Type::File) {
+        // Supported
+    } else {
+        if (entry->getType() == Type::DeviceBloc) {
+            Mess::DispMessQString("F6 Renomer/Déplacer","Device Bloc n'est pas supporté");
+        } else if (entry->getType() == Type::DeviceCharacter) {
+            Mess::DispMessQString("F6 Renomer/Déplacer","Device Character n'est pas supporté");
+        } else if (entry->getType() == Type::Fifo) {
+            Mess::DispMessQString("F6 Renomer/Déplacer","Fifo n'est pas supporté");
+        } else if (entry->getType() == Type::Socket) {
+            Mess::DispMessQString("F6 Renomer/Déplacer","Socket n'est pas supporté");
+        } else if (entry->getType() == Type::SymbolicLink) {
+            Mess::DispMessQString("F6 Renomer/Déplacer","Lien symbolique n'est pas supporté");
+        } else {
+            Mess::DispMessQString("F6 Renomer/Déplacer","N'est pas supporté");
+        }
+        return;
+    }
+
+    this->hide();
+    //QString side = this->sideFocus;
     QString rename = "";
     QString sideOrigin = side;
     QString keyOrigin = "";
