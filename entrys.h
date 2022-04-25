@@ -11,6 +11,13 @@ struct ErrDirNotFound: public std::exception {
     }
 };
 
+struct ErrKeyNotFound: public std::exception {
+    QString description;
+    const char *what() const throw() {
+        return "Key not found";
+    }
+};
+
 enum Cmd {
     Cd, Mkdir, Cp, None
 };

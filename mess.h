@@ -13,6 +13,7 @@ class Mess : public QObject
 public:
     explicit Mess(QObject *parent = nullptr);
     static void DispMess(ErrDirNotFound &e);
+    static void DispMess(ErrKeyNotFound &e);
     static void DispMess(fs::filesystem_error &e);
     static void DispMess(std::bad_alloc &e);
     static void DispMess(std::exception &e);
