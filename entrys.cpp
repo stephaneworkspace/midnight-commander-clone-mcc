@@ -162,7 +162,7 @@ void Entrys::execCmd(QString cmd, QString side) {
 }
 
 QVector<Entry*> Entrys::getEntrys(QString side) {
-    return this->hash_side_entry.take(side);
+    return this->hash_side_entry.value(side);
 }
 
 QString Entrys::minusOneLevel(QString dir) {
