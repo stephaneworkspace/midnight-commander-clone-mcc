@@ -449,8 +449,7 @@ void Dialog::on_pushButton_F5_clicked()
                Mess::DispMess(e);
            } catch(std::bad_alloc& e) {
                Mess::DispMess(e);
-           } catch (std::exception& e) { // Not using fs::filesystem_error since std::bad_alloc can throw too.
-               // Handle exception or use error code overload of fs::copy.
+           } catch (std::exception& e) {
                Mess::DispMess(e);
            }
        }

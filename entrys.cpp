@@ -145,12 +145,25 @@ void Entrys::execCmd(QString cmd, QString side) {
                     }
                 }
             } else if (c == Cmd::Mkdir) {
-                // TODO ./
-                mkdir(word.toLocal8Bit().constData(), 0777); // TODO analyse int result
-                if (word.endsWith("/")) {
-                    this->setDir(word, side);
-                } else {
-                    this->setDir(word + "/", side);
+                try {
+                    QString cmd_qstring = this->getPath(side) + word;
+                    QByteArray cmd_ba = cmd_qstring.toLocal8Bit();
+                    const char* cmd = cmd_ba.constData();
+                    fs::create_directories(cmd);
+                    if (cmd_qstring.endsWith("/")) {
+                        this->setDir(cmd_qstring, side);
+                    } else {
+                        this->setDir(cmd_qstring + "/", side);
+                    }
+                } catch(fs::filesystem_error& e) {
+                    Mess::DispMess(e);
+                    break;
+                } catch(std::bad_alloc& e) {
+                    Mess::DispMess(e);
+                    break;
+                } catch (std::exception& e) {
+                    Mess::DispMess(e);
+                    break;
                 }
             } else if (c == Cmd::Cp) {
                 // TODO Cp
