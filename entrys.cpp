@@ -119,6 +119,8 @@ void Entrys::execCmd(QString cmd, QString side) {
                 c = Cmd::Mkdir;
             } else if (word == "cp") {
                 c = Cmd::Cp;
+            } else if (word == "rm") {
+                c = Cmd::Rm;
             }
         } else {
             if (c == Cmd::Cd) {
@@ -148,25 +150,44 @@ void Entrys::execCmd(QString cmd, QString side) {
                 try {
                     QString cmd_qstring = this->getPath(side) + word;
                     QByteArray cmd_ba = cmd_qstring.toLocal8Bit();
-                    const char* cmd = cmd_ba.constData();
+                    const char *cmd = cmd_ba.constData();
                     fs::create_directories(cmd);
                     if (cmd_qstring.endsWith("/")) {
                         this->setDir(cmd_qstring, side);
                     } else {
                         this->setDir(cmd_qstring + "/", side);
                     }
-                } catch(fs::filesystem_error& e) {
+                } catch (fs::filesystem_error &e) {
                     Mess::DispMess(e);
                     break;
-                } catch(std::bad_alloc& e) {
+                } catch (std::bad_alloc &e) {
+                    Mess::DispMess(e);
+                    break;
+                } catch (std::exception &e) {
+                    Mess::DispMess(e);
+                    break;
+                }
+            } else if (c == Cmd::Cp) {
+                // TODO
+
+            } else if (c == Cmd::Rm) {
+                try {
+                    QString cmd_qstring = this->getPath(side) + word;
+                    QByteArray cmd_ba = cmd_qstring.toLocal8Bit();
+                    const char* cmd = cmd_ba.constData();
+                    fs::remove_all(cmd); // TODO remove and execption question
+                    /*if (cmd_qstring.endsWith("/")) {
+                        this->setDir(cmd_qstring, side);
+                    } else {
+                        this->setDir(cmd_qstring + "/", side);
+                    }*/ // TODO reflechir, ca c'est pas pour RM, ce qui faut la c'est enlever a l'avant dernier /
+                } catch(fs::filesystem_error& e) {
                     Mess::DispMess(e);
                     break;
                 } catch (std::exception& e) {
                     Mess::DispMess(e);
                     break;
                 }
-            } else if (c == Cmd::Cp) {
-                // TODO Cp
             }
             break;
         }

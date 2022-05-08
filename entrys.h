@@ -19,7 +19,7 @@ struct ErrKeyNotFound: public std::exception {
 };
 
 enum Cmd {
-    Cd, Mkdir, Cp, None
+    Cd, Mkdir, Cp, Rm, None
 };
 
 class Entrys : public QObject

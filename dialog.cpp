@@ -84,7 +84,22 @@ Dialog::~Dialog()
 
 void Dialog::execCmd(QString cmd, QString side) {
     this->entrys->execCmd(cmd, side);
-    this->setListUi(side);
+    /* TODO with detect, this is for RM */
+    QWidget* fw = this->focusWidget();
+    QString dir;
+    if (fw != Q_NULLPTR) {
+        if (fw->objectName() == "tableWidgetLeft" || fw->objectName() == "tableWidgetRight") {
+            QTableWidget *fwtable = dynamic_cast<QTableWidget *>(this->focusWidget());
+            if (fw->objectName() == "tableWidgetLeft") {
+                dir = ui->pathLeft->text();
+            } else if (fw->objectName() == "tableWidgetRight") {
+                dir = ui->pathRight->text();
+            }
+            this->entrys->setDir(dir, side);
+            this->setListUi(side);
+        }
+    }
+    /* this->setListUi(side); */
 }
 
 bool Dialog::eventFilter(QObject *obj, QEvent *event) {
